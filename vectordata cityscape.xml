@@ -1,0 +1,575 @@
+<?xml version="1.0"?>
+<vectordata>
+	<lightsource>
+		<!-- set lightsource position for shading. If any object has the "lightsource" property, these will be overridden. -->
+		<lightposition>
+			<lightpositionX>600</lightpositionX>
+			<lightpositionY>200</lightpositionY>
+			<lightpositionZ>800</lightpositionZ>
+		</lightposition>
+	</lightsource>
+	<vectorangleslist>
+		<!-- set up angle sets for rotations. Values given are starting values. -->
+		<vectorangles name="viewer">
+			<angleX>0</angleX>
+			<angleY>90</angleY>
+			<angleZ>0</angleZ>
+		</vectorangles>
+	</vectorangleslist>
+    <vectorobjectslist>
+		<!-- set up vectorobjects. Each object must have a position, a reference to angles used, a list of nodes, and a list of surfaces. -->
+		<!-- minshade (must be between 0 and 1) determines "shade multiplier" when surface is at 90 degree angle to light source. Use 1.0 to keep full color value ie. no shading. -->
+		<!-- use "copyfrom" property (e.g. <vectorobject name="cube2" copyfrom="cube1">) to copy objects; properties like position and colors can then be re-defined, and initangles specified. -->
+		<!-- object can have default values for surface color, edgewidth, showback (e.g. "defcolor"). These can be overridden for each surface. -->	
+		<vectorobject name="house1_1">
+			<!-- house1: a small house with gabled roof -->
+			<position>
+				<positionX>-120</positionX>
+				<positionY>0</positionY>
+				<positionZ>200</positionZ>
+			</position>
+			<anglesref>viewer</anglesref>
+			<minshade>0.2</minshade>
+			<defcolor>
+				<defcolorR>255</defcolorR>
+				<defcolorG>255</defcolorG>
+				<defcolorB>255</defcolorB>
+			</defcolor>
+			<defedgewidth>0</defedgewidth>
+			<defshowback>0</defshowback>
+			<nodelist numnodes="10">
+				<node ID="0">
+					<nodeX>50</nodeX>
+ 					<nodeY>0</nodeY>
+ 					<nodeZ>-100</nodeZ>
+				</node>
+				<node ID="1">
+					<nodeX>50</nodeX>
+ 					<nodeY>0</nodeY>
+ 					<nodeZ>100</nodeZ>
+				</node>
+				<node ID="2">
+					<nodeX>-50</nodeX>
+ 					<nodeY>0</nodeY>
+ 					<nodeZ>100</nodeZ>
+				</node>
+				<node ID="3">
+					<nodeX>-50</nodeX>
+ 					<nodeY>0</nodeY>
+ 					<nodeZ>-100</nodeZ>
+				</node>
+				<node ID="4">
+					<nodeX>50</nodeX>
+ 					<nodeY>100</nodeY>
+ 					<nodeZ>-100</nodeZ>
+				</node>
+				<node ID="5">
+					<nodeX>50</nodeX>
+ 					<nodeY>100</nodeY>
+ 					<nodeZ>100</nodeZ>
+				</node>
+				<node ID="6">
+					<nodeX>-50</nodeX>
+ 					<nodeY>100</nodeY>
+ 					<nodeZ>100</nodeZ>
+				</node>
+				<node ID="7">
+					<nodeX>-50</nodeX>
+ 					<nodeY>100</nodeY>
+ 					<nodeZ>-100</nodeZ>
+				</node>
+				<node ID="8">
+					<nodeX>0</nodeX>
+ 					<nodeY>125</nodeY>
+ 					<nodeZ>-75</nodeZ>
+				</node>
+				<node ID="9">
+					<nodeX>0</nodeX>
+ 					<nodeY>125</nodeY>
+ 					<nodeZ>75</nodeZ>
+				</node>
+			</nodelist>
+			<surfacelist>
+				<surface ID="0">
+					<nodelist>
+						<node order="0" refID="0"/>
+						<node order="1" refID="1"/>
+						<node order="2" refID="5"/>
+						<node order="3" refID="4"/>
+					</nodelist>
+				</surface>
+				<surface ID="0">
+					<nodelist>
+						<node order="0" refID="1"/>
+						<node order="1" refID="2"/>
+						<node order="2" refID="6"/>
+						<node order="3" refID="5"/>
+					</nodelist>
+				</surface>
+				<surface ID="0">
+					<nodelist>
+						<node order="0" refID="2"/>
+						<node order="1" refID="3"/>
+						<node order="2" refID="7"/>
+						<node order="3" refID="6"/>
+					</nodelist>
+				</surface>
+				<surface ID="0">
+					<nodelist>
+						<node order="0" refID="3"/>
+						<node order="1" refID="0"/>
+						<node order="2" refID="4"/>
+						<node order="3" refID="7"/>
+					</nodelist>
+				</surface>
+				<surface ID="0">
+					<nodelist>
+						<node order="0" refID="4"/>
+						<node order="1" refID="5"/>
+						<node order="2" refID="9"/>
+						<node order="3" refID="8"/>
+					</nodelist>
+				</surface>
+				<surface ID="0">
+					<nodelist>
+						<node order="0" refID="5"/>
+						<node order="1" refID="6"/>
+						<node order="2" refID="9"/>
+					</nodelist>
+				</surface>
+				<surface ID="0">
+					<nodelist>
+						<node order="0" refID="6"/>
+						<node order="1" refID="7"/>
+						<node order="2" refID="8"/>
+						<node order="3" refID="9"/>
+					</nodelist>
+				</surface>
+				<surface ID="0">
+					<nodelist>
+						<node order="0" refID="7"/>
+						<node order="1" refID="4"/>
+						<node order="2" refID="8"/>
+					</nodelist>
+				</surface>
+			</surfacelist>
+		</vectorobject>
+		<vectorobject name="house1_2" copyfrom="house1_1">
+			<position>
+				<positionX>120</positionX>
+				<positionY>0</positionY>
+				<positionZ>200</positionZ>
+			</position>
+		</vectorobject>
+		<vectorobject name="house1_5" copyfrom="house1_1">
+			<position>
+				<positionX>0</positionX>
+				<positionY>0</positionY>
+				<positionZ>600</positionZ>
+			</position>
+			<initangles>
+				<angleXadd>0</angleXadd>
+				<angleYadd>90</angleYadd>
+				<angleZadd>0</angleZadd>
+			</initangles>
+		</vectorobject>
+		<vectorobject name="house2_1">
+			<!-- house2: a big house / building with a slanted roof section -->
+			<position>
+				<positionX>-650</positionX>
+				<positionY>0</positionY>
+				<positionZ>-450</positionZ>
+			</position>
+			<anglesref>viewer</anglesref>
+			<minshade>0.2</minshade>
+			<defcolor>
+				<defcolorR>255</defcolorR>
+				<defcolorG>255</defcolorG>
+				<defcolorB>255</defcolorB>
+			</defcolor>
+			<defedgewidth>0</defedgewidth>
+			<defshowback>0</defshowback>
+			<nodelist numnodes="10">
+				<node ID="0">
+					<nodeX>100</nodeX>
+ 					<nodeY>0</nodeY>
+ 					<nodeZ>-100</nodeZ>
+				</node>
+				<node ID="1">
+					<nodeX>100</nodeX>
+ 					<nodeY>0</nodeY>
+ 					<nodeZ>100</nodeZ>
+				</node>
+				<node ID="2">
+					<nodeX>-100</nodeX>
+ 					<nodeY>0</nodeY>
+ 					<nodeZ>100</nodeZ>
+				</node>
+				<node ID="3">
+					<nodeX>-100</nodeX>
+ 					<nodeY>0</nodeY>
+ 					<nodeZ>-100</nodeZ>
+				</node>
+				<node ID="4">
+					<nodeX>100</nodeX>
+ 					<nodeY>150</nodeY>
+ 					<nodeZ>-100</nodeZ>
+				</node>
+				<node ID="5">
+					<nodeX>100</nodeX>
+ 					<nodeY>150</nodeY>
+ 					<nodeZ>100</nodeZ>
+				</node>
+				<node ID="6">
+					<nodeX>-100</nodeX>
+ 					<nodeY>200</nodeY>
+ 					<nodeZ>100</nodeZ>
+				</node>
+				<node ID="7">
+					<nodeX>-100</nodeX>
+ 					<nodeY>200</nodeY>
+ 					<nodeZ>-100</nodeZ>
+				</node>
+				<node ID="8">
+					<nodeX>50</nodeX>
+ 					<nodeY>200</nodeY>
+ 					<nodeZ>-100</nodeZ>
+				</node>
+				<node ID="9">
+					<nodeX>50</nodeX>
+ 					<nodeY>200</nodeY>
+ 					<nodeZ>100</nodeZ>
+				</node>
+			</nodelist>
+			<surfacelist>
+				<surface ID="0">
+					<nodelist>
+						<node order="0" refID="0"/>
+						<node order="1" refID="1"/>
+						<node order="2" refID="5"/>
+						<node order="3" refID="4"/>
+					</nodelist>
+				</surface>
+				<surface ID="0">
+					<nodelist>
+						<node order="0" refID="1"/>
+						<node order="1" refID="2"/>
+						<node order="2" refID="6"/>
+						<node order="3" refID="9"/>
+						<node order="4" refID="5"/>
+					</nodelist>
+				</surface>
+				<surface ID="0">
+					<nodelist>
+						<node order="0" refID="2"/>
+						<node order="1" refID="3"/>
+						<node order="2" refID="7"/>
+						<node order="3" refID="6"/>
+					</nodelist>
+				</surface>
+				<surface ID="0">
+					<nodelist>
+						<node order="0" refID="3"/>
+						<node order="1" refID="0"/>
+						<node order="2" refID="4"/>
+						<node order="3" refID="8"/>
+						<node order="4" refID="7"/>
+					</nodelist>
+				</surface>
+				<surface ID="0">
+					<nodelist>
+						<node order="0" refID="4"/>
+						<node order="1" refID="5"/>
+						<node order="2" refID="9"/>
+						<node order="3" refID="8"/>
+					</nodelist>
+				</surface>
+				<surface ID="0">
+					<nodelist>
+						<node order="0" refID="6"/>
+						<node order="1" refID="7"/>
+						<node order="2" refID="8"/>
+						<node order="3" refID="9"/>
+					</nodelist>
+				</surface>
+			</surfacelist>
+		</vectorobject>
+		<vectorobject name="house2_2" copyfrom="house2_1">
+			<position>
+				<positionX>-700</positionX>
+				<positionY>0</positionY>
+				<positionZ>-100</positionZ>
+			</position>
+		</vectorobject>
+		<vectorobject name="house2_3" copyfrom="house2_1">
+			<position>
+				<positionX>-680</positionX>
+				<positionY>0</positionY>
+				<positionZ>250</positionZ>
+			</position>
+		</vectorobject>
+		<vectorobject name="hall">
+			<!-- hall: a big hall-like building -->
+			<position>
+				<positionX>0</positionX>
+				<positionY>0</positionY>
+				<positionZ>-300</positionZ>
+			</position>
+			<anglesref>viewer</anglesref>
+			<minshade>0.2</minshade>
+			<defcolor>
+				<defcolorR>255</defcolorR>
+				<defcolorG>255</defcolorG>
+				<defcolorB>255</defcolorB>
+			</defcolor>
+			<defedgewidth>0</defedgewidth>
+			<defshowback>0</defshowback>
+			<nodelist numnodes="20">
+				<node ID="0">	
+					<nodeX>200</nodeX>
+ 					<nodeY>0</nodeY>
+ 					<nodeZ>-100</nodeZ>
+				</node>	
+				<node ID="1">	
+					<nodeX>200</nodeX>
+					<nodeY>0</nodeY>
+					<nodeZ>100</nodeZ>
+				</node>	
+				<node ID="2">	
+					<nodeX>100</nodeX>
+					<nodeY>0</nodeY>
+					<nodeZ>200</nodeZ>
+				</node>	
+				<node ID="3">	
+					<nodeX>-100</nodeX>
+					<nodeY>0</nodeY>
+					<nodeZ>200</nodeZ>
+				</node>	
+				<node ID="4">	
+					<nodeX>-200</nodeX>
+					<nodeY>0</nodeY>
+					<nodeZ>100</nodeZ>
+				</node>	
+				<node ID="5">	
+					<nodeX>-200</nodeX>
+					<nodeY>0</nodeY>
+					<nodeZ>-100</nodeZ>
+				</node>	
+				<node ID="6">	
+					<nodeX>-100</nodeX>
+					<nodeY>0</nodeY>
+					<nodeZ>-200</nodeZ>
+				</node>	
+				<node ID="7">	
+					<nodeX>100</nodeX>
+					<nodeY>0</nodeY>
+					<nodeZ>-200</nodeZ>
+				</node>	
+				<node ID="8">	
+					<nodeX>200</nodeX>
+					<nodeY>80</nodeY>
+					<nodeZ>-100</nodeZ>
+				</node>	
+				<node ID="9">	
+					<nodeX>200</nodeX>
+					<nodeY>80</nodeY>
+					<nodeZ>100</nodeZ>
+				</node>	
+				<node ID="10">	
+					<nodeX>100</nodeX>
+					<nodeY>80</nodeY>
+					<nodeZ>200</nodeZ>
+				</node>	
+				<node ID="11">	
+					<nodeX>-100</nodeX>
+					<nodeY>80</nodeY>
+					<nodeZ>200</nodeZ>
+				</node>	
+				<node ID="12">	
+					<nodeX>-200</nodeX>
+					<nodeY>80</nodeY>
+					<nodeZ>100</nodeZ>
+				</node>	
+				<node ID="13">	
+					<nodeX>-200</nodeX>
+					<nodeY>80</nodeY>
+					<nodeZ>-100</nodeZ>
+				</node>	
+				<node ID="14">	
+					<nodeX>-100</nodeX>
+					<nodeY>80</nodeY>
+					<nodeZ>-200</nodeZ>
+				</node>	
+				<node ID="15">	
+					<nodeX>100</nodeX>
+					<nodeY>80</nodeY>
+					<nodeZ>-200</nodeZ>
+				</node>	
+				<node ID="16">	
+					<nodeX>100</nodeX>
+					<nodeY>150</nodeY>
+					<nodeZ>-100</nodeZ>
+				</node>	
+				<node ID="17">	
+					<nodeX>100</nodeX>
+					<nodeY>150</nodeY>
+					<nodeZ>100</nodeZ>
+				</node>	
+				<node ID="18">	
+					<nodeX>-100</nodeX>
+					<nodeY>150</nodeY>
+					<nodeZ>100</nodeZ>
+				</node>	
+				<node ID="19">	
+					<nodeX>-100</nodeX>
+					<nodeY>150</nodeY>
+					<nodeZ>-100</nodeZ>
+				</node>	
+			</nodelist>
+			<surfacelist>
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="0"/>
+						<node order="1" refID="1"/>
+						<node order="2" refID="9"/>
+						<node order="3" refID="8"/>
+					</nodelist>	
+				</surface>		
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="1"/>
+						<node order="1" refID="2"/>
+						<node order="2" refID="10"/>
+						<node order="3" refID="9"/>
+					</nodelist>	
+				</surface>		
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="2"/>
+						<node order="1" refID="3"/>
+						<node order="2" refID="11"/>
+						<node order="3" refID="10"/>
+					</nodelist>	
+				</surface>		
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="3"/>
+						<node order="1" refID="4"/>
+						<node order="2" refID="12"/>
+						<node order="3" refID="11"/>
+					</nodelist>	
+				</surface>		
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="4"/>
+						<node order="1" refID="5"/>
+						<node order="2" refID="13"/>
+						<node order="3" refID="12"/>
+					</nodelist>	
+				</surface>		
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="5"/>
+						<node order="1" refID="6"/>
+						<node order="2" refID="14"/>
+						<node order="3" refID="13"/>
+					</nodelist>	
+				</surface>		
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="6"/>
+						<node order="1" refID="7"/>
+						<node order="2" refID="15"/>
+						<node order="3" refID="14"/>
+					</nodelist>	
+				</surface>		
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="7"/>
+						<node order="1" refID="0"/>
+						<node order="2" refID="8"/>
+						<node order="3" refID="15"/>
+					</nodelist>	
+				</surface>		
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="8"/>
+						<node order="1" refID="9"/>
+						<node order="2" refID="17"/>
+						<node order="3" refID="16"/>
+					</nodelist>	
+				</surface>		
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="9"/>
+						<node order="1" refID="10"/>
+						<node order="2" refID="17"/>
+					</nodelist>	
+				</surface>		
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="10"/>
+						<node order="1" refID="11"/>
+						<node order="2" refID="18"/>
+						<node order="3" refID="17"/>
+					</nodelist>	
+				</surface>		
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="11"/>
+						<node order="1" refID="12"/>
+						<node order="2" refID="18"/>
+					</nodelist>	
+				</surface>		
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="12"/>
+						<node order="1" refID="13"/>
+						<node order="2" refID="19"/>
+						<node order="3" refID="18"/>
+					</nodelist>	
+				</surface>		
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="13"/>
+						<node order="1" refID="14"/>
+						<node order="2" refID="19"/>
+					</nodelist>	
+				</surface>		
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="14"/>
+						<node order="1" refID="15"/>
+						<node order="2" refID="16"/>
+						<node order="3" refID="19"/>
+					</nodelist>	
+				</surface>		
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="15"/>
+						<node order="1" refID="8"/>
+						<node order="2" refID="16"/>
+					</nodelist>	
+				</surface>		
+				<surface ID="0">		
+					<nodelist>	
+						<node order="0" refID="16"/>
+						<node order="1" refID="17"/>
+						<node order="2" refID="18"/>
+						<node order="3" refID="19"/>
+					</nodelist>	
+				</surface>		
+			</surfacelist>
+		</vectorobject>
+		<positionobject name="positions">
+			<!-- the positionobject will create a vector object holding all the positions of the other objects as its nodes, without any surfaces. -->
+			<!-- its own position will be the viewer position (initially) and anglesref the rotation angles. -->
+			<position>
+				<positionX>0</positionX>
+				<positionY>-350</positionY>
+				<positionZ>2500</positionZ>
+			</position>
+			<anglesref>viewer</anglesref>
+		</positionobject>
+	</vectorobjectslist>
+</vectordata>
