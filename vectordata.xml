@@ -162,9 +162,9 @@
 			<rotateZ>2</rotateZ>
 			<speed>30</speed>
 			<loop>
-				<loopstart>50</loopstart>
-				<loopend>450</loopend>
-				<looppos>50</looppos>
+				<loopstart>100</loopstart>
+				<loopend>500</loopend>
+				<looppos>100</looppos>
 			</loop>
 			<timeseries>
 				<movementstep time="0">
@@ -196,6 +196,11 @@
 					<movepositionX>400</movepositionX>
 					<movepositionY>800</movepositionY>
 					<movepositionZ>0</movepositionZ>
+				</movementstep>
+				<movementstep time="600">
+					<movepositionX>0</movepositionX>
+					<movepositionY>800</movepositionY>
+					<movepositionZ>-1200</movepositionZ>
 				</movementstep>
 			</timeseries>
 		</movement>
