@@ -1,4 +1,4 @@
-RealTime3DwithPython/Vector3D
+# RealTime3DwithPython/Vector3D
 
 Real time 3D vector graphics with Python, old skool Amiga Demo style.
 
