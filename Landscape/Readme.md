@@ -1,3 +1,3 @@
-RealTime3DwithPython/Landscape
+# RealTime3DwithPython/Landscape
 
-A Fractal Landscape with mouse zooming.
+A Fractal Landscape with mouse controlled zooming. See also http://https://oldskoolpython.blogspot.com/
