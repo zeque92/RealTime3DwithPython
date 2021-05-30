@@ -38,6 +38,7 @@ class SideEffectCube:
         self.zPos = self.startZPos
         self.target_fps = target_fps                    # affects movement speeds
         self.running = True
+        self.stop = False
         self.paused = False
         self.clock = pygame.time.Clock()
         self.start_timer = pygame.time.get_ticks()
@@ -54,10 +55,12 @@ class SideEffectCube:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    self.stop = True
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.zoomDirection = -1
                         self.totalFrames = self.totalFrameCount - self.zoomFrames
+                        self.stop = True
                     if event.key == pygame.K_f:
                         self.toggleFullScreen()
                     if event.key == pygame.K_SPACE:
@@ -94,6 +97,8 @@ class SideEffectCube:
             if pygame.time.get_ticks() > self.start_timer + 1000 * self.run_seconds:
                 self.zoomDirection = -1
                 self.totalFrames = self.totalFrameCount - self.zoomFrames
+
+        return self.stop
 
     def zoomCube(self):
         """

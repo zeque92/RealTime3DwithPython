@@ -24,6 +24,7 @@ class EndCredits:
         self.frameEntryCount = 60    # nr of frames to use for entry phase
         self.frameNr = 999999
         self.running = True
+        self.stop = False
         self.target_fps = target_fps
         self.clock = pygame.time.Clock()
 
@@ -50,9 +51,11 @@ class EndCredits:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    self.stop = True
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
+                        self.stop = True
                     if event.key == pygame.K_f:
                         self.toggleFullScreen()
                     if event.key == pygame.K_s:
@@ -115,6 +118,8 @@ class EndCredits:
             self.clock.tick(self.target_fps)  # this keeps code running at max target_fps
             # switch between currently showed and the next screen (prepared in "buffer")
             pygame.display.flip()
+
+        return self.stop
 
     def loadImage(self, picture_file):
 

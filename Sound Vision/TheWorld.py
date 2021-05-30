@@ -49,6 +49,7 @@ class TheWorld:
         self.lightPosition = np.array([-500.0, 600.0, -1300.0])     # presets only used if no lightObject
         self.target_fps = target_fps                    # affects movement speeds, sets maximum refresh rate
         self.running = True
+        self.stop = False
         self.paused = False
         self.clock = pygame.time.Clock()
         # the following for checking performance only
@@ -106,9 +107,11 @@ class TheWorld:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    self.stop = True
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
+                        self.stop = True
                     if event.key == pygame.K_SPACE:
                         self.pause()
                     if event.key == pygame.K_f:
@@ -147,6 +150,8 @@ class TheWorld:
                 self.measureTime("display flip")
                 self.clock.tick(self.target_fps)  # this keeps code running at max target_fps
                 self.measureTime("wait")
+
+        return self.stop
 
     def movement(self):
         """

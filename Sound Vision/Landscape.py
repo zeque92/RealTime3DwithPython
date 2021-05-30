@@ -53,6 +53,7 @@ class Landscape:
         self.autoFrameCount = 30                        # refers to how many cycles of pygame.time.wait(100) will be passed before moving on
         self.autoFrames = 0
         self.running = True
+        self.stop = False
 
     def run(self):
         """ Main loop. """
@@ -65,9 +66,11 @@ class Landscape:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    self.stop = True
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
+                        self.stop = True
                     if event.key == pygame.K_f:
                         self.toggleFullScreen()
                     if event.key == pygame.K_RIGHT and self.landSize < 10:
@@ -126,6 +129,8 @@ class Landscape:
 
             # wait to give CPU a chance to do something else...
             pygame.time.wait(100)
+
+        return self.stop
 
     def initGrid(self):
 

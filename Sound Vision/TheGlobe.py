@@ -46,6 +46,7 @@ class TheGlobe:
         self.target_fps = target_fps                        # sets maximum refresh rate
         self.phase = 0
         self.running = True
+        self.stop = False
         # the following for checking performance only
         self.infoDisplay = False
         self.paused = False
@@ -81,9 +82,11 @@ class TheGlobe:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    self.stop = True
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
+                        self.stop = True
                     if event.key == pygame.K_f:
                         self.toggleFullScreen()
                     if event.key == pygame.K_SPACE:
@@ -133,6 +136,8 @@ class TheGlobe:
 
             if pygame.time.get_ticks() > self.start_timer + 1000 * self.run_seconds:
                 self.running = False
+
+        return self.stop
 
     def setupGlobe(self):
         """

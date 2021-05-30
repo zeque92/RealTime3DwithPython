@@ -49,6 +49,7 @@ class BoxInABox:
         self.start_timer = pygame.time.get_ticks()
         self.target_fps = target_fps
         self.running = True
+        self.stop = False
 
         self.screenCopy.set_colorkey(self.backgroundColor)
         self.screenCopy.set_alpha(self.alphaValue)
@@ -63,9 +64,11 @@ class BoxInABox:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    self.stop = True
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
+                        self.stop = True
                     if event.key == pygame.K_f:
                         self.toggleFullScreen()
                     if event.key == pygame.K_s:
@@ -103,6 +106,8 @@ class BoxInABox:
 
             if pygame.time.get_ticks() > self.start_timer + 1000 * self.run_seconds:
                 self.running = False
+
+        return self.stop
 
     def flyFrame(self):
 

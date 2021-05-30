@@ -38,6 +38,7 @@ class SoundVision:
         self.pic_file3 = "TheEnd.jpg"
         self.clock = pygame.time.Clock()
         self.target_fps = target_fps
+        self.stop = False
 
     def run(self):
 
@@ -45,73 +46,110 @@ class SoundVision:
         pygame.mixer.music.load(self.music_file1)
         pygame.mixer.music.play(loops=-1)
 
-        # run the parts
-        self.prepareScreen()
-        self.showPicture(self.pic_file1, self.target_size, 1)
-        self.wait(2500)
-        self.showPicture(self.pic_file1, self.target_size, 2)
+        while not self.stop:
 
-        self.prepareScreen(False)
-        TitleText.TitleText(self.screen, self.target_fps).run()
+            # run the parts
+            self.prepareScreen()
+            self.showPicture(self.pic_file1, self.target_size, 1)
+            self.wait(2500)
+            if self.stop:
+                break
+            self.showPicture(self.pic_file1, self.target_size, 2)
 
-        # change tune
-        pygame.mixer.music.fadeout(1500)
-        self.prepareScreen(True)
-        self.wait(1000)
-        pygame.mixer.music.load(self.music_file2)
-        pygame.mixer.music.play(loops=-1)
-        TheStars.TheStars(self.screen, self.target_fps).run()
+            self.prepareScreen(False)
+            self.stop = TitleText.TitleText(self.screen, self.target_fps).run()
+            if self.stop:
+                break
 
-        self.prepareScreen(False)
-        SideEffectCube.SideEffectCube(screen, self.target_fps, 25).run()
+            # change tune
+            pygame.mixer.music.fadeout(1500)
+            self.prepareScreen(True)
+            self.wait(1000)
+            if self.stop:
+                break
+            pygame.mixer.music.load(self.music_file2)
+            pygame.mixer.music.play(loops=-1)
+            self.stop = TheStars.TheStars(self.screen, self.target_fps).run()
+            if self.stop:
+                break
 
-        self.prepareScreen(True)
-        ShadowBobs.ShadowBobs(self.screen, 30).run()  # not target pfs = 30, optimised for max this
+            self.prepareScreen(False)
+            self.stop = SideEffectCube.SideEffectCube(screen, self.target_fps, 25).run()
+            if self.stop:
+                break
 
-        # re-start the tune, as looping does not work very well
-        pygame.mixer.music.fadeout(1500)
-        self.prepareScreen(True)
-        self.wait(1000)
-        pygame.mixer.music.play(loops=-1)
+            self.prepareScreen(True)
+            self.stop = ShadowBobs.ShadowBobs(self.screen, 30).run()  # not target pfs = 30, optimised for max this
+            if self.stop:
+                break
 
-        self.prepareScreen(True)
-        TheGlobe.TheGlobe(self.screen, self.target_fps, 25).run()
+            # re-start the tune, as looping does not work very well
+            pygame.mixer.music.fadeout(1500)
+            self.prepareScreen(True)
+            self.wait(1000)
+            if self.stop:
+                break
+            pygame.mixer.music.play(loops=-1)
 
-        TheWorld.TheWorld(self.screen, self.target_fps).run()
+            self.prepareScreen(True)
+            self.stop = TheGlobe.TheGlobe(self.screen, self.target_fps, 25).run()
+            if self.stop:
+                break
 
-        self.prepareScreen(True)
-        # change tune
-        pygame.mixer.music.fadeout(1500)
-        self.showPicture(self.pic_file2, self.target_size, 0)
-        self.wait(1000)
-        pygame.mixer.music.load(self.music_file3)
-        pygame.mixer.music.play(loops=-1)
-        self.wait(2500)
+            self.prepareScreen(True)
+            self.stop = TheWorld.TheWorld(self.screen, self.target_fps).run()
+            if self.stop:
+                break
 
-        self.prepareScreen(True)
-        Raytracing.Raytracing(self.screen, self.target_fps).run()
+            self.prepareScreen(True)
+            # change tune
+            pygame.mixer.music.fadeout(1500)
+            self.showPicture(self.pic_file2, self.target_size, 0)
+            self.wait(1000)
+            if self.stop:
+                break
+            pygame.mixer.music.load(self.music_file3)
+            pygame.mixer.music.play(loops=-1)
+            self.wait(2500)
+            if self.stop:
+                break
 
-        self.prepareScreen(True)
-        MilkyWay.MilkyWay(self.screen, self.target_fps, 25).run()
+            self.prepareScreen(True)
+            self.stop = Raytracing.Raytracing(self.screen, self.target_fps).run()
+            if self.stop:
+                break
 
-        self.prepareScreen(True)
-        BoxInABox.BoxInABox(self.screen, self.target_fps, 25).run()
+            self.prepareScreen(True)
+            self.stop = MilkyWay.MilkyWay(self.screen, self.target_fps, 25).run()
+            if self.stop:
+                break
 
-        self.prepareScreen(True)
-        Landscape.Landscape(self.screen).run()
+            self.prepareScreen(True)
+            self.stop = BoxInABox.BoxInABox(self.screen, self.target_fps, 25).run()
+            if self.stop:
+                break
 
-        self.prepareScreen(True)
-        EndCredits.EndCredits(self.screen, self.target_fps).run()
+            self.prepareScreen(True)
+            self.stop = Landscape.Landscape(self.screen).run()
+            if self.stop:
+                break
 
-        self.prepareScreen(True)
-        self.showPicture(self.pic_file3, (self.width, self.height), 0)
-        self.wait(16000)
+            self.prepareScreen(True)
+            self.stop = EndCredits.EndCredits(self.screen, self.target_fps).run()
+            if self.stop:
+                break
 
+            self.prepareScreen(True)
+            self.showPicture(self.pic_file3, (self.width, self.height), 0)
+            self.wait(16000)
+
+            self.stop = True  # do not loop from the start
+
+        # exit; fade out, close display, stop music
         pygame.mixer.music.fadeout(2500)
         self.wait(2000)
         self.prepareScreen(True)
 
-        # exit; close display, stop music
         pygame.quit()
         exit()
 
@@ -185,9 +223,11 @@ class SoundVision:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
+                    self.stop = True
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
+                        self.stop = True
                     if event.key == pygame.K_s:
                         # save screen, at half the resolution, using class name as file name
                         pygame.image.save(pygame.transform.scale(self.screen, (int(self.screen.get_size()[0] / 2), int(self.screen.get_size()[1] / 2))),
@@ -210,8 +250,8 @@ if __name__ == '__main__':
     # pick disp0lay mode from list or set a specific resolution
     # disp_modes = pygame.display.list_modes(0, pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.HWSURFACE)
     # disp_size = disp_modes[9]  # selecting display size from available list. Assuming the 9th element is nice...
-    # disp_size = (1920, 1080)  # to force display size
-    disp_size = (800, 600)
+    disp_size = (1920, 1080)  # to force display size
+    # disp_size = (1280, 720)
     target_fps = 60  # target frames per second - good to set to monitor refresh rate, but will affect the running speed of some parts.
 
     # set up screen

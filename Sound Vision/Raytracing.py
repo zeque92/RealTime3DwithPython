@@ -35,6 +35,7 @@ class Raytracing:
         self.frameShowCount = 80
         self.frameNr = 0
         self.running = True
+        self.stop = False
         self.target_fps = target_fps
         self.clock = pygame.time.Clock()
 
@@ -48,10 +49,12 @@ class Raytracing:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    self.stop = True
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         if self.frameNr < self.frameCount - self.frameShowCount:
                             self.frameNr = self.frameCount - min(self.frameNr, self.frameShowCount)  # start exiting
+                        self.stop = True
                     if event.key == pygame.K_f:
                         self.toggleFullScreen()
                     if event.key == pygame.K_s:
@@ -73,6 +76,8 @@ class Raytracing:
             self.clock.tick(self.target_fps)  # this keeps code running at max target_fps
             # switch between currently showed and the next screen (prepared in "buffer")
             pygame.display.flip()
+
+        return self.stop
 
     def animate(self):
         """

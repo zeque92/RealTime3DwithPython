@@ -43,6 +43,7 @@ class TheStars:
         self.clock = pygame.time.Clock()
         self.target_fps = target_fps                       # sets maximum refresh rate
         self.running = True
+        self.stop = False
         # the following for checking performance only
         self.infoDisplay = False
         self.paused = False
@@ -80,9 +81,11 @@ class TheStars:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    self.stop = True
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
+                        self.stop = True
                     if event.key == pygame.K_f:
                         self.toggleFullScreen()
                     if event.key == pygame.K_SPACE:
@@ -119,6 +122,8 @@ class TheStars:
             self.measureTime("display flip")
             self.clock.tick(self.target_fps)  # this keeps code running at max target_fps
             self.measureTime("wait")
+
+        return self.stop
 
     def setupStars(self):
 

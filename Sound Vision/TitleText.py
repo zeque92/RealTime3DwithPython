@@ -78,6 +78,7 @@ class TitleText:
         self.frameCount = 0
         self.target_fps = target_fps
         self.running = True
+        self.stop = False
         self.rectUsed = [0, 0, 0, 0]
         self.infoDisplay = False
         self.millisecs = 0
@@ -114,9 +115,11 @@ class TitleText:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    self.stop = True
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
+                        self.stop = True
                     if event.key == pygame.K_f:
                         self.toggleFullScreen()
                     if event.key == pygame.K_i:
@@ -206,6 +209,8 @@ class TitleText:
             self.clock.tick(self.target_fps)  # this keeps code running at max target_fps
             self.measureTime("wait")
             self.frameCount += 1
+
+        return self.stop
 
     def slideBars(self, bfAdd, screen):
 
