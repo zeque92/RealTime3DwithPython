@@ -24,6 +24,7 @@ class Maze:
         self.screen_block_offset = None
         self.prev_update = 0
         self.clock = pygame.time.Clock()
+        self.slow_mode = False
         self.running = True
 
         # initialize an array of walls filled with ones, data "not visited" + if exists for 2 walls (down and right) per cell.
@@ -151,7 +152,7 @@ class Maze:
         max_coord = (np.flip(np.maximum(cell, neighbor) * 2 - 1) * self.screen_block_size + int(self.screen_block_size) + self.screen_block_offset).astype(np.int16)
         pygame.draw.rect(self.screen, (200, 200, 200), (min_coord, max_coord - min_coord))
 
-        if pygame.time.get_ticks() > self.prev_update + 50:
+        if self.slow_mode or pygame.time.get_ticks() > self.prev_update + 50:
             self.prev_update = pygame.time.get_ticks()
             pygame.display.flip()
 
@@ -163,12 +164,22 @@ class Maze:
                     if event.key == pygame.K_ESCAPE:
                         self.running = False
                     if event.key == pygame.K_f:
-                        screen_copy = self.screen.copy()
-                        self.toggle_fullscreen(screen_copy)
+                        self.toggle_fullscreen()
+                    if event.key == pygame.K_m:
+                        self.toggle_slow_mode()
 
-    def toggle_fullscreen(self, screen_copy):
+        if self.slow_mode:
+            pygame.time.wait(3)
+
+    def toggle_slow_mode(self):
+
+        # switch between a windowed display and full screen
+        self.slow_mode = not(self.slow_mode)
+
+    def toggle_fullscreen(self):
 
         # toggle between fullscreen and windowed mode
+        screen_copy = self.screen.copy()
         pygame.display.toggle_fullscreen()
         self.screen.blit(screen_copy, (0, 0))
         pygame.display.flip()
@@ -231,8 +242,7 @@ if __name__ == '__main__':
                 if event.key == pygame.K_SPACE:
                     pausing = False
                 if event.key == pygame.K_f:
-                    screen_copy = maze.screen.copy()
-                    maze.toggle_fullscreen(screen_copy)
+                    maze.toggle_fullscreen()
                 if event.key == pygame.K_s:
                     # save screen as png image
                     maze.save_image()
