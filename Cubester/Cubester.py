@@ -15,7 +15,7 @@ class Cubester:
         self.target_fps = target_fps
         self.width = self.screen.get_size()[0]
         self.height = self.screen.get_size()[1]
-        self.mid_screen = np.array([int(self.width / 2), int(self.height / 2)], dtype=float)
+        self.mid_screen = np.array([int(self.width / 2), int(self.height / 2)], dtype=np.float32)
         self.background_color = (0, 0, 0)
         self.screen_info = pygame.Surface((300, 300), 0, self.screen)
         self.screen_info.set_colorkey(self.background_color)
@@ -370,7 +370,7 @@ class Cubester:
 
     def angle_add(self, cube, time, prev_time):
 
-        unit_vector = np.array([0, 0, 0], dtype=np.float)
+        unit_vector = np.array([0, 0, 0], dtype=np.float32)
         time_adjustment = (time - prev_time) / (20 * 17)
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT] or self.mouse_rotate == 'RIGHT':
@@ -801,7 +801,7 @@ class Cube:
             [3, 4, 5, 2],
             [3, 0, 5, 1]
             ], dtype=np.int32)
-        self.cubie_nodes = np.zeros((8 * self.cubies_nr, 3), dtype=np.float)
+        self.cubie_nodes = np.zeros((8 * self.cubies_nr, 3), dtype=np.float32)
         # surf_nodes has the rotated node numbers for all surfaces
         self.surf_nodes = np.resize(self.surfaces, (self.cubies_nr * 6, 4)) + np.repeat(np.arange(self.cubies_nr) * 8, 6)[:, None]
         self.surf_colors = np.zeros((6 * self.cubies_nr, 3), np.uint8)
@@ -809,7 +809,7 @@ class Cube:
         self.cubie_surf_color_nrs = np.zeros((self.cubies_nr, 6), np.uint8)
 
         self.moves = []
-        self.angles = np.zeros((3), dtype=np.float)
+        self.angles = np.zeros((3), dtype=np.float32)
 
         cubie_nr = 0
         mid = (size - 1) / 2
@@ -853,11 +853,11 @@ class Cube:
         self.cubie_rotated_disc_nodes = self.cubie_nodes.copy()
         self.cubie_rotated_nodes = self.cubie_nodes.copy()
         self.cubie_trans_nodes = np.zeros((8 * self.cubies_nr, 2), dtype=np.int16)
-        self.cubie_surface_angle_viewer = np.zeros((6 * self.cubies_nr), dtype=np.float)
+        self.cubie_surface_angle_viewer = np.zeros((6 * self.cubies_nr), dtype=np.float32)
 
         self.cube_corner_nodes = self.nodes * (1 + mid * (2 + distance))
         self.cube_corner_rotated_nodes = self.cube_corner_nodes.copy()
-        self.cube_surface_angle_viewer = np.zeros((6), dtype=np.float)
+        self.cube_surface_angle_viewer = np.zeros((6), dtype=np.float32)
         self.cube_corner_edges = np.array([
             [[0, 3], [4, 7], [5, 6], [1, 2]],  # edges where Y and Z constant and X from - to +
             [[0, 4], [1, 5], [2, 6], [3, 7]],  # edges where X and Z constant and Y from - to +
@@ -904,8 +904,8 @@ if __name__ == '__main__':
     # disp_modes = pygame.display.list_modes(0, pygame.FULLSCREEN | pygame.DOUBLEBUF | pygame.HWSURFACE)
     # disp_size = disp_modes[4] # selecting display size from available list. Assuming the 5th element is nice...
     # disp_size = (2560, 1440)
-    # disp_size = (1920, 1080)
-    disp_size = (1280, 720)
+    disp_size = (1920, 1080)
+    # disp_size = (1280, 720)
     # disp_size = (800, 600)
 
     pygame.font.init()
