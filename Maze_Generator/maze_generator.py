@@ -28,7 +28,7 @@ class Maze:
         self.running = True
 
         # initialize an array of walls filled with ones, data "not visited" + if exists for 2 walls (down and right) per cell.
-        self.wall_size = np.array([size_y, size_x], dtype=np.int)
+        self.wall_size = np.array([size_y, size_x], dtype=np.int16)
         # add top, bottom, left, and right (ie. + 2 and + 2) to array size so can later work without checking going over its boundaries.
         self.walls = np.ones((self.wall_size[0] + 2, self.wall_size[1] + 2, 3), dtype=np.byte)
         # mark edges as "unusable" (-1)
@@ -38,7 +38,7 @@ class Maze:
         self.walls[self.wall_size[0] + 1, :, 0] = -1
 
         # initialize an array of block data - each passage (0) and wall (1) is a block
-        self.block_size = np.array([size_y * 2 + 1, size_x * 2 + 1], dtype=np.int)
+        self.block_size = np.array([size_y * 2 + 1, size_x * 2 + 1], dtype=np.int16)
         self.blocks = np.ones((self.block_size[0], self.block_size[1]), dtype=np.byte)
 
     def gen_maze_walls(self, corridor_len=999):
@@ -50,14 +50,14 @@ class Maze:
         # Returns maze walls data - a NumPy array size (y, x, 2) with 0 or 1 for down and right cell walls.
 
         # set a random starting cell and mark it as "visited"
-        cell = np.array([random.randrange(2, self.wall_size[0]), random.randrange(2, self.wall_size[1])], dtype=np.int)
+        cell = np.array([random.randrange(2, self.wall_size[0]), random.randrange(2, self.wall_size[1])], dtype=np.int16)
         self.walls[cell[0], cell[1], 0] = 0
 
         # a simple definition of the four neighboring cells relative to current cell
-        up    = np.array([-1,  0], dtype=np.int)
-        down  = np.array([ 1,  0], dtype=np.int)
-        left  = np.array([ 0, -1], dtype=np.int)
-        right = np.array([ 0,  1], dtype=np.int)
+        up    = np.array([-1,  0], dtype=np.int16)
+        down  = np.array([ 1,  0], dtype=np.int16)
+        left  = np.array([ 0, -1], dtype=np.int16)
+        right = np.array([ 0,  1], dtype=np.int16)
 
         # preset some variables
         need_cell_range = False
@@ -91,7 +91,7 @@ class Maze:
                 # check if more corridor length is still available
                 if round_nr - corridor_start < corridor_len:
                     # continue current corridor: set current cell to neighbor
-                    cell = np.array([neighbor[0], neighbor[1]], dtype=np.int)
+                    cell = np.array([neighbor[0], neighbor[1]], dtype=np.int16)
                 else:
                     # maximum corridor length fully used; make a new junction and continue from there
                     need_cell_range = True
