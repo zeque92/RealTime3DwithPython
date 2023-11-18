@@ -26,9 +26,9 @@ class TextureMapping:
         self.fade_time = 1000                               # time to fade in/out milliseconds
         self.phase = 1
         if self.tutorial_mode:
-            self.mid_screen = np.array([int(2 * self.width / 3), int(self.height / 2)], dtype=np.float)
+            self.mid_screen = np.array([int(2 * self.width / 3), int(self.height / 2)], dtype=float)
         else:
-            self.mid_screen = np.array([int(self.width / 2), int(self.height / 2)], dtype=np.float)
+            self.mid_screen = np.array([int(self.width / 2), int(self.height / 2)], dtype=float)
         self.z_scale = self.height * 2.2                    # scaling for z coordinates
         self.z_pos = 1000.0
         self.target_fps = target_fps
@@ -44,7 +44,7 @@ class TextureMapping:
         self.surface_arrays = []                            # a list containing references to surfarrays or surfarray lists (for animation) used for each surface
         self.surface_arrays_item = []                       # a list containing the item used in surface_arrays (for surfarray lists)
         self.surface_array_nodes = np.zeros((0, 4, 2), dtype=np.int16)  # surfarray corners
-        self.surface_angle_viewer = np.zeros((0), dtype=np.float)
+        self.surface_angle_viewer = np.zeros((0), dtype=float)
         self.rotated_nodes = np.zeros((16, 3))              # rotated_nodes will have X,Y,Z coordinates after rotation ("final 3D coordinates")
         self.trans_nodes = np.zeros((0, 2))                 # trans_nodes will have X,Y screen coordinates
         self.screen_rect = pygame.Rect((self.mid_screen), (1, 1))
@@ -346,7 +346,7 @@ class TextureMapping:
             # clear picture area
             size = (np.amax(np.vstack((self.tutorial_img_data[0][1] * self.tutorial_img_data[0][2],
                                       self.tutorial_img_data[1][1] * self.tutorial_img_data[1][2])), axis=0)
-                    + 2).astype(np.int)
+                    + 2).astype(np.int16)
             pos = np.amin(np.vstack((self.tutorial_img_data[0][3], self.tutorial_img_data[1][3])), axis=0)
             self.screen.fill(self.background_color, (pos, size))
         else:
@@ -359,7 +359,7 @@ class TextureMapping:
                     # draw section on rotating cube
                     pygame.draw.polygon(self.screen, color, sd[1], 2)
                     # draw section on still image. Get coordinates, apply scale and add position
-                    nodes = (np.asarray(sd[2]) * self.tutorial_img_data[surface][1] + self.tutorial_img_data[surface][3]).astype(np.int)
+                    nodes = (np.asarray(sd[2]) * self.tutorial_img_data[surface][1] + self.tutorial_img_data[surface][3]).astype(np.int16)
                     pygame.draw.polygon(self.screen, color, nodes, 2)
                     # change color for next section
                     color = np.array([color[2], color[0], color[1]])
@@ -598,7 +598,7 @@ class TextureMapping:
                 [ gr,-rg,  0],
                 [-gr,-rg,  0],
                 [-gr, rg,  0]
-                ])).astype(np.float)
+                ])).astype(float)
             self.surfaces = np.array([
                 [ 4, 11,  7, 13, 12],
                 [ 4, 17,  5, 10, 11],
@@ -659,7 +659,7 @@ class TextureMapping:
                 [-rg,  0.0, -1.0],
                 [-rg,  0.0,  1.0],
                 [ rg,  0.0,  1.0]
-                ])).astype(np.float)
+                ])).astype(float)
             self.surfaces = np.array([
                 [ 1,  0,  7],
                 [ 7,  0,  9],
@@ -740,7 +740,7 @@ class TextureMapping:
                 [ 1, -1, -1],
                 [-1, -1, -1],
                 [-1, -1,  1]
-                ])).astype(np.float)
+                ])).astype(float)
             self.surfaces = np.array([
                 [0, 1, 2, 3],
                 [4, 7, 6, 5],
@@ -773,13 +773,13 @@ class TextureMapping:
                 img = self.image_G
                 img_size0 = np.asarray(img.get_size())
                 img_scale0 = min((self.width / 3) / img_size0[0], (self.height * 0.9) / img_size0[1])
-                img_surf0 = pygame.transform.scale(img, (img_scale0 * img_size0).astype(np.int))
+                img_surf0 = pygame.transform.scale(img, (img_scale0 * img_size0).astype(np.int16))
                 img_pos0 = np.array([10, (self.height - img_scale0 * img_size0[1]) // 2])
                 self.tutorial_img_data.append((img_surf0, img_scale0, img_size0, img_pos0))
                 img = self.image_M
                 img_size1 = np.asarray(img.get_size())
                 img_scale1 = min((self.width / 3) / img_size1[0], (self.height * 0.9) / img_size1[1])
-                img_surf1 = pygame.transform.scale(img, (img_scale1 * img_size1).astype(np.int))
+                img_surf1 = pygame.transform.scale(img, (img_scale1 * img_size1).astype(np.int16))
                 img_pos1 = np.array([10, (self.height - img_scale1 * img_size1[1]) // 2])
                 self.tutorial_img_data.append((img_surf1, img_scale1, img_size1, img_pos1))
 
@@ -828,7 +828,7 @@ if __name__ == '__main__':
 
     pygame.font.init()
     pygame.mixer.init()
-    music_file = "simplicity.mod"  # this mod by Jellybean is available at e.g. https://demozoo.org/sceners/7713/
+    music_file = "simplicity.ogg"  # this mod by Jellybean is available at e.g. https://demozoo.org/sceners/7713/
     pygame.mixer.music.load(music_file)
     pygame.mixer.music.play(loops=-1)
 
