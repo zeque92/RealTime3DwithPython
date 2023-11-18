@@ -4,4 +4,4 @@ Space Invaders, the classic game (1978) in Python. The graphics are either "free
 
 See https://oldskoolpython.blogspot.com/2022/01/space-invaders-game.html for some more details on the game.
 
-[Note: Originally added 2020. Minor bug fixes due to deprecated NumPy data types in Nov 2023.]
+[Note: Originally added 2022. Minor bug fixes due to deprecated NumPy data types in Nov 2023.]
