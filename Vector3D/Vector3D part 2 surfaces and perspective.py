@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygame
 import numpy as np
-import math
 
 key_to_function = {
     pygame.K_ESCAPE: (lambda x: x.terminate()),         # ESC key to quit
@@ -11,7 +10,7 @@ key_to_function = {
 class VectorViewer:
     """
     Displays 3D vector objects on a Pygame screen.
-    
+
     @author: kalle
     """
 
@@ -30,13 +29,13 @@ class VectorViewer:
         self.running = True
         self.paused = False
         self.clock = pygame.time.Clock()
-            
+
     def addVectorObj(self, VectorObj):
         self.VectorObjs.append(VectorObj)
-             
+
     def run(self):
         """ Main loop. """
-                  
+
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -44,42 +43,42 @@ class VectorViewer:
                 elif event.type == pygame.KEYDOWN:
                     if event.key in key_to_function:
                         key_to_function[event.key](self)
-            
+
             if self.paused == True:
                 pygame.time.wait(100)
-            
+
             else:
                 # main components executed here
                 self.rotate()
                 self.display()
-                
+
                 # release any locks on screen
                 while self.screen.get_locked():
                     self.screen.unlock()
-                    
+
                 # switch between currently showed and the next screen (prepared in "buffer")
                 pygame.display.flip()
                 self.clock.tick(self.target_fps) # this keeps code running at max target_fps
 
         # exit; close display, stop music
         pygame.display.quit()
-                                                         
+
     def rotate(self):
-        """ 
+        """
         Rotate all objects. First calculate rotation matrix.
         Then apply the relevant rotation matrix with object position to each VectorObject.
         """
-                
+
         # rotate and flatten (transform) objects
         for VectorObj in self.VectorObjs:
             VectorObj.increaseAngles()
             VectorObj.setRotationMatrix()
             VectorObj.rotate()
             VectorObj.transform(self.zScale, self.midScreen)
-                  
+
     def display(self):
-        """ 
-        Draw the VectorObjs on the screen. 
+        """
+        Draw the VectorObjs on the screen.
         """
 
         # lock screen for pixel operations
@@ -87,25 +86,25 @@ class VectorViewer:
 
         # clear screen.
         self.screen.fill(self.backgroundColor)
-                   
+
         # draw the actual objects
         for VectorObj in self.VectorObjs:
             # first sort object surfaces so that the most distant is first.
             VectorObj.updateSurfaceZPos()
             VectorObj.sortSurfacesByZPos()
-            # then draw surface by surface. 
+            # then draw surface by surface.
             for surface in VectorObj.surfaces:
                 # build a list of transNodes for this surface
                 node_list = ([VectorObj.transNodes[node][:2] for node in surface.nodes])
-                pygame.draw.aalines(self.screen, surface.color, True, node_list)       
-                pygame.draw.polygon(self.screen, surface.color, node_list, surface.edgeWidth)       
-            
+                pygame.draw.aalines(self.screen, surface.color, True, node_list)
+                pygame.draw.polygon(self.screen, surface.color, node_list, surface.edgeWidth)
+
         # unlock screen
         self.screen.unlock()
- 
+
     def terminate(self):
 
-        self.running = False   
+        self.running = False
 
     def pause(self):
 
@@ -113,7 +112,7 @@ class VectorViewer:
             self.paused = False
         else:
             self.paused = True
-       
+
 class VectorObject:
 
     """
@@ -121,13 +120,13 @@ class VectorObject:
     Nodes are the predefined, static definition of object "corner points", around object position anchor point (0,0,0).
     RotatedNodes are the Nodes rotated by the given Angles and moved to Position.
     TransNodes are the RotatedNodes transformed from 3D to 2D (X.Y) screen coordinates.
-    
+
     @author: kalle
     """
     def __init__(self):
         self.position = np.array([0.0, 0.0, 0.0, 1.0])      # position
         self.angles = np.array([0.0, 0.0, 0.0])
-        self.angleScale = (2.0 * np.pi) / 360.0             # to scale degrees. 
+        self.angleScale = (2.0 * np.pi) / 360.0             # to scale degrees.
         self.rotationMatrix = np.zeros((3,3))
         self.rotateSpeed = np.array([0.0, 0.0, 0.0])
         self.nodes = np.zeros((0, 4))                       # nodes will have unrotated X,Y,Z coordinates plus a column of ones for position handling
@@ -138,11 +137,11 @@ class VectorObject:
 
     def setPosition(self, position):
         # move object by giving it a rotated position.
-        self.position = position 
+        self.position = position
 
     def setRotateSpeed(self, angles):
         # set object rotation speed.
-        self.rotateSpeed = angles 
+        self.rotateSpeed = angles
 
     def addNodes(self, node_array):
         # add nodes (all at once); add a column of ones for using position in transform
@@ -157,7 +156,7 @@ class VectorObject:
         surface.edgeWidth = edgeWidth
         surface.nodes = node_list
         self.surfaces.append(surface)
-    
+
     def increaseAngles(self):
         self.angles += self.rotateSpeed
         for i in range(3):
@@ -166,11 +165,11 @@ class VectorObject:
 
     def setRotationMatrix(self):
         """ Set matrix for rotation using angles. """
-        
+
         (sx, sy, sz) = np.sin((self.angles) * self.angleScale)
         (cx, cy, cz) = np.cos((self.angles) * self.angleScale)
- 
-        # build a matrix for X, Y, Z rotation (in that order, see Wikipedia: Euler angles) including position shift. 
+
+        # build a matrix for X, Y, Z rotation (in that order, see Wikipedia: Euler angles) including position shift.
         # add a column of zeros for later position use
         self.rotationMatrix = np.array([[cy * cz               , -cy * sz              , sy      ],
                                         [cx * sz + cz * sx * sy, cx * cz - sx * sy * sz, -cy * sx],
@@ -179,22 +178,22 @@ class VectorObject:
     def updateSurfaceZPos(self):
         # calculate average Z position for each surface using rotatedNodes
         for surface in self.surfaces:
-            zpos = sum([self.rotatedNodes[node, 2] for node in surface.nodes]) / len(surface.nodes) 
+            zpos = sum([self.rotatedNodes[node, 2] for node in surface.nodes]) / len(surface.nodes)
             surface.setZPos(zpos)
-        
+
     def sortSurfacesByZPos(self):
         # sorts surfaces by Z position so that the most distant comes first in list
         self.surfaces.sort(key=lambda VectorObjectSurface: VectorObjectSurface.zpos, reverse=True)
 
     def rotate(self):
-        """ 
+        """
         Apply a rotation defined by a given rotation matrix.
         """
         matrix = np.vstack((self.rotationMatrix, self.position[0:3]))   # add position to rotation matrix to move object at the same time
         self.rotatedNodes = np.dot(self.nodes, matrix)
 
     def transform(self, zScale, midScreen):
-        """ 
+        """
          Flatten from 3D to 2D and add screen center.
         """
         # apply perspective using Z coordinates and add midScreen to center on screen to get to transNodes.
@@ -206,7 +205,7 @@ class VectorObjectSurface:
 
     """
     Surfaces for a VectorObject.
-    
+
     @author: kalle
     """
     def __init__(self):
@@ -220,10 +219,10 @@ class VectorObjectSurface:
 
     def setZPos(self, zpos):
         self.zpos = zpos
- 
-       
+
+
 if __name__ == '__main__':
-    """ 
+    """
     Prepare screen, objects etc.
     """
 
@@ -268,9 +267,9 @@ if __name__ == '__main__':
     vobj.setRotateSpeed(speed_angles)
     position = np.array([0.0, 0.0, 1500.0, 1.0])
     vobj.setPosition(position)
- 
+
     # add the object
     vv.addVectorObj(vobj)
-     
+
     # run the main program
     vv.run()

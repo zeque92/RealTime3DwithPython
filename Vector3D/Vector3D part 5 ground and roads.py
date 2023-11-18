@@ -15,7 +15,7 @@ key_to_function = {
 class VectorViewer:
     """
     Displays 3D vector objects on a Pygame screen.
-    
+
     @author: kalle
     """
 
@@ -45,19 +45,19 @@ class VectorViewer:
         self.running = True
         self.paused = False
         self.clock = pygame.time.Clock()
-            
+
     def setVectorPos(self, VectorPosObj):
         self.VectorPos = VectorPosObj
-             
+
     def addVectorObj(self, VectorObj):
         self.VectorObjs.append(VectorObj)
-       
+
     def addVectorAnglesList(self, VectorAngles):
         self.VectorAnglesList.append(VectorAngles)
 
     def run(self):
         """ Main loop. """
-                  
+
         for VectorObj in self.VectorObjs:
             VectorObj.initObject() # initialize objects
 
@@ -68,40 +68,40 @@ class VectorViewer:
                 elif event.type == pygame.KEYDOWN:
                     if event.key in key_to_function:
                         key_to_function[event.key](self)
-            
+
             if self.paused == True:
                 pygame.time.wait(100)
-            
+
             else:
                 # main components executed here
                 self.rotate()
                 self.calculate()
                 self.display()
-                
+
                 # release any locks on screen
                 while self.screen.get_locked():
                     self.screen.unlock()
-                    
+
                 # switch between currently showed and the next screen (prepared in "buffer")
                 pygame.display.flip()
                 self.clock.tick(self.target_fps) # this keeps code running at max target_fps
 
         # exit; close display, stop music
         pygame.display.quit()
-                                                         
+
     def rotate(self):
-        """ 
+        """
         Rotate all objects. First calculate rotation matrix.
         Then apply the relevant rotation matrix with object position to each VectorObject.
         """
-                
+
         # calculate rotation matrices for all angle sets
         for VectorAngles in self.VectorAnglesList:
             VectorAngles.setRotateAngles()
             VectorAngles.setRotationMatrix()
-        
+
         # rotate object positions, copy those to objects.
-        self.VectorPos.rotate() 
+        self.VectorPos.rotate()
         for (node_num, VectorObj) in self.VectorPos.objects:
             VectorObj.setPosition(self.VectorPos.rotatedNodes[node_num, :])
 
@@ -114,10 +114,10 @@ class VectorViewer:
                 if VectorObj.visible == 1:
                     VectorObj.transform(self.midScreen, self.zScale, self.objMinZ) # flattens to 2D
                     VectorObj.updateVisibleTrans(self.midScreen) # test for outside of screen
-            
+
     def calculate(self):
-        """ 
-        Calculate shades and visibility. 
+        """
+        Calculate shades and visibility.
         """
 
         for VectorObj in (vobj for vobj in self.VectorObjs if vobj.visible == 1 and vobj != self.groundObject):
@@ -127,23 +127,23 @@ class VectorViewer:
             VectorObj.updateSurfaceAngleToViewer()
             VectorObj.updateSurfaceAngleToLightSource(self.lightPosition)
             VectorObj.updateSurfaceColorShade()
-       
+
     def display(self):
-        """ 
-        Draw the VectorObjs on the screen. 
+        """
+        Draw the VectorObjs on the screen.
         """
 
         # lock screen for pixel operations
         self.screen.lock()
 
-        # clear screen. If ground object is used, do clearing there. 
+        # clear screen. If ground object is used, do clearing there.
         if self.groundObject is None:
             self.screen.fill(self.backgroundColor)
-                   
+
         # first sort VectorObjs so that the most distant is first, but prio classes separately.
         # prio classes allow e.g. to draw all roads first and only then other objects
         self.VectorObjs.sort(key=lambda VectorObject: (VectorObject.prio, VectorObject.position[2]), reverse=True)
-        
+
         # draw prio by prio
         for prio_nr in self.VectorObjPrios:
 
@@ -155,11 +155,11 @@ class VectorViewer:
                     transNodes = VectorObj.groundData(self.midScreen, self.zScale, self.objMinZ, self.groundZ, self.groundShades, self.groundShadeNr)
                     # draw ground. transNodes is of shape(groundShadeNr + 1, 4) and each row has two (left & right) X,Y coordinates
                     # the first component is not part of the ground but used to clear the rest of the screen
-                    surface = VectorObj.surfaces[0]  # just one ground surface                      
+                    surface = VectorObj.surfaces[0]  # just one ground surface
                     for i in range(self.groundShadeNr + 1):
                         node_list = self.cropEdges([transNodes[i,0:2], transNodes[i,2:4], transNodes[i+1,2:4], transNodes[i+1,0:2]], False, True) # X already cropped
                         self.drawPolygon(self.groundColors[i], node_list, surface.edgeWidth)
-                   
+
                 else:
                     if VectorObj.isFlat == 1:
                         # flat objects have a single surface and a prebuilt list of transNodes
@@ -173,8 +173,8 @@ class VectorViewer:
                         for surface in (surf for surf in VectorObj.surfaces if surf.visible == 1):
                             # build a list of transNodes for this surface
                             node_list = ([VectorObj.transNodes[node][:2] for node in surface.nodes])
-                            self.drawPolygon(surface.colorRGB(), node_list, surface.edgeWidth)       
-        
+                            self.drawPolygon(surface.colorRGB(), node_list, surface.edgeWidth)
+
         # unlock screen
         self.screen.unlock()
 
@@ -203,7 +203,7 @@ class VectorViewer:
                             crop_nodes.append(prev_node + diff_node * ((0 - prev_node[i]) / diff_node[i]))
                         if node[i] > self.midScreen[i] * 2 and prev_node[i] <= self.midScreen[i] * 2:
                             # line crosses screen maximum, so add a "crop point". Start from previous node and add difference stopping to midScreen[i] * 2
-                            crop_nodes.append(prev_node + diff_node * ((self.midScreen[i] * 2 - prev_node[i]) / diff_node[i]))         
+                            crop_nodes.append(prev_node + diff_node * ((self.midScreen[i] * 2 - prev_node[i]) / diff_node[i]))
                         # always add current node, if it is on screen
                         if node[i] >= 0 and node[i] <= self.midScreen[i] * 2:
                             crop_nodes.append(node)
@@ -211,24 +211,24 @@ class VectorViewer:
                     # for next i, copy results. Quit loop if no nodes to look at
                     node_list = crop_nodes
                     if len(node_list) < 3:
-                        break               
+                        break
             # convert to integers
             node_list = [(int(x[0] + 0.5), int(x[1] + 0.5)) for x in node_list]
         return node_list
-                              
+
     def drawPolygon(self, color, node_list, edgeWidth):
 
         if len(node_list) > 2: # a polygon needs at least 3 nodes
             if self.use_gfxdraw  == True:
-                pygame.gfxdraw.aapolygon(self.screen, node_list, color)                               
-                pygame.gfxdraw.filled_polygon(self.screen, node_list, color)                               
+                pygame.gfxdraw.aapolygon(self.screen, node_list, color)
+                pygame.gfxdraw.filled_polygon(self.screen, node_list, color)
             else:
-                pygame.draw.aalines(self.screen, color, True, node_list)       
-                pygame.draw.polygon(self.screen, color, node_list, edgeWidth)       
-                
+                pygame.draw.aalines(self.screen, color, True, node_list)
+                pygame.draw.polygon(self.screen, color, node_list, edgeWidth)
+
     def terminate(self):
 
-        self.running = False   
+        self.running = False
 
     def pause(self):
 
@@ -236,7 +236,7 @@ class VectorViewer:
             self.paused = False
         else:
             self.paused = True
-       
+
 class VectorObject:
 
     """
@@ -244,7 +244,7 @@ class VectorObject:
     Nodes are the predefined, static definition of object "corner points", around object position anchor point (0,0,0).
     RotatedNodes are the Nodes rotated by the given Angles and moved to Position.
     TransNodes are the RotatedNodes transformed from 3D to 2D (X.Y) screen coordinates.
-    
+
     @author: kalle
     """
     def __init__(self):
@@ -269,11 +269,11 @@ class VectorObject:
 
     def setPosition(self, position):
         # move object by giving it a rotated position.
-        self.position = position 
+        self.position = position
 
     def setFlat(self):
         # set isFlat
-        self.isFlat = 1 
+        self.isFlat = 1
 
     def addNodes(self, node_array):
         # add nodes (all at once); add a column of ones for using position in transform
@@ -290,10 +290,10 @@ class VectorObject:
         surface.backColor = backColor
         surface.nodes = node_list
         self.surfaces.append(surface)
-    
+
     def updateVisiblePos(self, objMinZ):
         # check if object is visible. If any of node Z coordinates are too close to viewer, set to 0, unless is flat
-        if self.isFlat == 0 and self.position[2] < objMinZ: 
+        if self.isFlat == 0 and self.position[2] < objMinZ:
             self.visible = 0
         else:
             self.visible = 1
@@ -301,7 +301,7 @@ class VectorObject:
     def updateVisibleNodes(self, objMinZ):
         # check if object is visible. If any of node Z coordinates are too close to viewer, set to 0, unless is flat
         if self.isFlat == 0:
-            if min(self.rotatedNodes[:, 2]) < objMinZ: 
+            if min(self.rotatedNodes[:, 2]) < objMinZ:
                 self.visible = 0
             else:
                 self.visible = 1
@@ -327,10 +327,10 @@ class VectorObject:
     def updateSurfaceZPos(self):
         # calculate average Z position for each surface using rotatedNodes
         for surface in self.surfaces:
-            zpos = sum([self.rotatedNodes[node, 2] for node in surface.nodes]) / len(surface.nodes) 
+            zpos = sum([self.rotatedNodes[node, 2] for node in surface.nodes]) / len(surface.nodes)
             surface.setZPos(zpos)
-            surface.setVisible(1) # set all surfaces to "visible" 
-        
+            surface.setVisible(1) # set all surfaces to "visible"
+
     def updateSurfaceCrossProductVector(self):
         # calculate cross product vector for each surface using rotatedNodes
         # always use vectors (1, 0) and (1, 2) (numbers representing nodes)
@@ -355,7 +355,7 @@ class VectorObject:
         # calculate acute angle between surface plane and Viewer
         # surface plane cross product vector and Viewer vector both from node 1.
         for surface in (surf for surf in self.surfaces if surf.visible == 1):
-            vec_Viewer = self.rotatedNodes[surface.nodes[1], 0:3] 
+            vec_Viewer = self.rotatedNodes[surface.nodes[1], 0:3]
             surface.setAngleToViewer(vec_Viewer)
             if surface.angleToViewer > 0 or surface.showBack == 1:
                 surface.setVisible(1)
@@ -370,7 +370,7 @@ class VectorObject:
             surface.setAngleToLightSource()
 
     def updateSurfaceColorShade(self):
-        # calculate shade for surface. 
+        # calculate shade for surface.
         for surface in (surf for surf in self.surfaces if surf.visible == 1):
             surface.setColorShade(self.minShade)
             if surface.showBack == 1: surface.setBackColorShade(self.minShade)
@@ -380,7 +380,7 @@ class VectorObject:
         self.surfaces.sort(key=lambda VectorObjectSurface: VectorObjectSurface.zpos, reverse=True)
 
     def rotate(self, viewerAngles):
-        """ 
+        """
         Apply a rotation defined by a given rotation matrix.
         For objects with their own angles / rotation matrix, apply those first and store results in objRotatedNodes.
         Could be done in one step but objRotatedNodes needed for shadow calculations.
@@ -397,14 +397,14 @@ class VectorObject:
         self.rotatedNodes = np.dot(np.hstack((self.objRotatedNodes, np.ones((np.shape(self.objRotatedNodes)[0], 1)))), matrix)
 
     def transform(self, midScreen, zScale, objMinZ):
-        """ 
+        """
         Flatten from 3D to 2D and add screen center.
         First crop flat objects by Z coordinate so that they can be drawn even if some Z coordinates are behind the viewer.
         """
         if self.isFlat == 1:
             # for flat objects, build a list of transNodes for the surface by first cropping the necessary surface sides to minZ
             for surface in self.surfaces:
-                surface.setVisible(1) # set all surfaces to "visible" 
+                surface.setVisible(1) # set all surfaces to "visible"
                 flat_nodes = np.zeros((0, 3))
                 for node_num in range(len(surface.nodes)):
                     node = self.rotatedNodes[surface.nodes[node_num], 0:3] # current node XYZ coordinates
@@ -419,14 +419,14 @@ class VectorObject:
                         flat_nodes = np.vstack((flat_nodes, node))
                 # apply perspective using Z coordinates and add midScreen to center on screen to get to transNodes
                 self.transNodes = (-flat_nodes[:, 0:2] * zScale) / (flat_nodes[:, 2:3]) + midScreen
-        else:            
+        else:
             # apply perspective using Z coordinates and add midScreen to center on screen to get to transNodes.
             # for normal objects, some of the transNodes will not be required, but possibly figuring out which are and processing them
             #   individually could take more time than this.
             self.transNodes = (self.rotatedNodes[:, 0:2] * zScale) / (-self.rotatedNodes[:, 2:3]) + midScreen
 
     def groundData(self, midScreen, zScale, objMinZ, groundZ, groundShades, groundShadeNr):
-        """ 
+        """
         Calculate ground data for on a ground object.
         Assumes the ground object "covers the ground" reasonably and isFlat = 1, and the perimeter is concave.
         Ground settings are defined in VectorViewer.
@@ -443,7 +443,7 @@ class VectorObject:
             next_node = self.rotatedNodes[0, :]
         else:
             next_node = self.rotatedNodes[nodenum + 1, :]
-            
+
         # get a straight line where Z (ie, distance from viewer) is constant. Start with the mid of farthest of the two lines.
         # then find the point with matching Z coordinate on the other line.
         # special cases: next_node or prev_node as far as node.
@@ -477,20 +477,20 @@ class VectorObject:
         # multipliers will span ground component span between groundZ/2 (furthest) and objMinZ
         mult = (mid1_node[2] / 2 - objMinZ) / ((mid1_node[2] - mid1_node_back[2]) / 2)
         # the most distant component (at groundZ). Most distant component will be very large (half of total)
-        left_nodes[0,:] = mid1_node  
-        right_nodes[0,:] = mid2_node                
+        left_nodes[0,:] = mid1_node
+        right_nodes[0,:] = mid2_node
 
         # other components from groundZ/2 to objMinZ
         for i in range(groundShadeNr):
             mult_i =  mult * math.sqrt((i+1) / groundShadeNr)
             left_nodes[i+1,:] = (mid1_node * (1.0 - mult_i) + mid1_node_back * mult_i) / 2
-            right_nodes[i+1,:] = (mid2_node * (1.0 - mult_i) + mid2_node_back * mult_i) / 2         
+            right_nodes[i+1,:] = (mid2_node * (1.0 - mult_i) + mid2_node_back * mult_i) / 2
         left_transNodes = (-left_nodes[:, 0:2] * zScale) / (left_nodes[:, 2:3]) + midScreen
         right_transNodes = (-right_nodes[:, 0:2] * zScale) / (right_nodes[:, 2:3]) + midScreen
-        
+
         # crop these nodes to screen X edges
         diff_transNodes = right_transNodes - left_transNodes
-        mult_nodes = right_transNodes[:, 0] / diff_transNodes[:, 0] 
+        mult_nodes = right_transNodes[:, 0] / diff_transNodes[:, 0]
         left_transNodes = right_transNodes - np.multiply(np.transpose(np.vstack((mult_nodes, mult_nodes))), diff_transNodes)
         diff_transNodes = right_transNodes - left_transNodes
         mult_nodes = (midScreen[0] * 2) / diff_transNodes[:,0]
@@ -524,17 +524,17 @@ class VectorObject:
                 # if ground already covers the whole screen, use the top node
                 right_skynode = right_transNodes[0,:]
             else:
-                right_skynode = midScreen * 2               
+                right_skynode = midScreen * 2
         # add the first component and build an array of all the transnodes
-        transNodes = np.vstack((np.hstack((left_skynode, right_skynode)), np.hstack((left_transNodes, right_transNodes))))      
-        
-        return(transNodes)        
-                
+        transNodes = np.vstack((np.hstack((left_skynode, right_skynode)), np.hstack((left_transNodes, right_transNodes))))
+
+        return(transNodes)
+
 class VectorObjectSurface:
 
     """
     Surfaces for a VectorObject.
-    
+
     @author: kalle
     """
     def __init__(self):
@@ -555,10 +555,10 @@ class VectorObjectSurface:
 
     def setZPos(self, zpos):
         self.zpos = zpos
- 
+
     def setVisible(self, visible):
         self.visible = visible
-        
+
     def setCrossProductVector(self, crossProductVector):
         self.crossProductVector = crossProductVector
 
@@ -570,22 +570,22 @@ class VectorObjectSurface:
 
     def setAngleToViewer(self, vec_Viewer):
         if self.crossProductLen > 0 and vec_Viewer.any() != 0:
-            # instead of true angle calculation using asin and vector lengths, a simple np.vdot is sufficient to find the sign (which defines if surface is visible) 
+            # instead of true angle calculation using asin and vector lengths, a simple np.vdot is sufficient to find the sign (which defines if surface is visible)
             # self.angleToViewer = math.asin(np.dot(self.crossProductVector, vec_Viewer) / (self.crossProductLen * np.linalg.norm(vec_Viewer)))
-            self.angleToViewer = np.dot(self.crossProductVector, vec_Viewer) 
- 
+            self.angleToViewer = np.dot(self.crossProductVector, vec_Viewer)
+
     def setAngleToLightSource(self):
         if self.crossProductLen > 0 and self.lightSourceVector.any() != 0:
-            # instead of true angle calculation using asin and vector lengths, a simple np.vdot is sufficient to find the sign (which defines if surface is shadowed) 
+            # instead of true angle calculation using asin and vector lengths, a simple np.vdot is sufficient to find the sign (which defines if surface is shadowed)
             # self.angleToLightSource = math.asin(np.dot(self.crossProductVector, self.lightSourceVector) / (self.crossProductLen * np.linalg.norm(self.lightSourceVector))) / (np.pi / 2)
             self.angleToLightSource = np.dot(self.crossProductVector, self.lightSourceVector)
-        
+
     def setColorShade(self, minShade):
         if self.angleToLightSource <= 0:
             self.colorShade = minShade
         else:
             self.colorShade = minShade + (1.0 - minShade) * math.asin(self.angleToLightSource / (self.crossProductLen * self.vectorLen(self.lightSourceVector))) / (np.pi / 2)
-        
+
     def setBackColorShade(self, minShade):
         if self.angleToLightSource >= 0:
             self.backColorShade = minShade
@@ -605,7 +605,7 @@ class VectorAngles:
     """
     Angles for rotating vector objects. For efficiency, one set of angles can be used for many objects.
     Angles are defined for axes X (horizontal), Y (vertical), Z ("distance") in degrees (360).
-    
+
     @author: kalle
     """
     def __init__(self):
@@ -615,11 +615,11 @@ class VectorAngles:
         self.rotationMatrix = np.zeros((3,3))
         self.rotateAngles = np.array([0.0, 0.0, 0.0])
         self.rotate = np.array([0.0, 0.0, 0.0])
-    
+
     def setAngles(self, angles):
-        # Set rotation angles to fixed values. 
+        # Set rotation angles to fixed values.
         self.angles = angles
-     
+
     def setRotateAngles(self):
         self.rotateAngles += self.rotate
         for i in range(3):
@@ -628,21 +628,21 @@ class VectorAngles:
 
     def setRotationMatrix(self):
         # Set matrix for rotation using angles.
-        
+
         (sx, sy, sz) = np.sin((self.angles + self.rotateAngles) * self.angleScale)
         (cx, cy, cz) = np.cos((self.angles + self.rotateAngles) * self.angleScale)
- 
-        # build a matrix for X, Y, Z rotation (in that order, see Wikipedia: Euler angles) including position shift. 
+
+        # build a matrix for X, Y, Z rotation (in that order, see Wikipedia: Euler angles) including position shift.
         # add a column of zeros for later position use
         self.rotationMatrix = np.array([[cy * cz               , -cy * sz              , sy      ],
                                         [cx * sz + cz * sx * sy, cx * cz - sx * sy * sz, -cy * sx],
                                         [sx * sz - cx * cz * sy, cz * sx + cx * sy * sz, cx * cy ]])
-    
+
 class VectorPosition:
 
     """
     A vector object defining the positions of other objects in its nodes (see VectorObject).
-    
+
     @author: kalle
     """
     def __init__(self):
@@ -652,12 +652,12 @@ class VectorPosition:
         self.rotatedNodes = np.zeros((0, 3))            # rotatedNodes will have X,Y,Z coordinates
         self.objects = []                               # connects each node to a respective VectorObject
         self.objName = ""
-        
+
     def addNodes(self, node_array):
         # add nodes (all at once); add a column of ones for using position in transform
         self.nodes = np.hstack((node_array, np.ones((len(node_array), 1))))
         self.rotatedNodes = node_array # initialize with nodes
-        
+
     def addObjects(self, object_list):
         self.objects = object_list
 
@@ -666,15 +666,12 @@ class VectorPosition:
         matrix = np.vstack((self.angles.rotationMatrix, np.zeros((1, 3))))
         # apply rotation and position matrix to nodes
         self.rotatedNodes = np.dot(self.nodes, matrix) + self.position[0:3]
-        
-        
+
+
 if __name__ == '__main__':
-    """ 
+    """
     Prepare screen, read objects etc. from file.
     """
-
-    # set data directory
-    os.chdir("D:\kalle\Documents\Python")
 
     # set screen size
     # first check available full screen modes
@@ -689,7 +686,7 @@ if __name__ == '__main__':
     vecdata = et.parse("vectordata ground and roads.xml")
 
     root = vecdata.getroot()
-    
+
     for angles in root.iter('vectorangles'):
         ang = VectorAngles()
         ang.angName = angles.get('name')
@@ -701,7 +698,7 @@ if __name__ == '__main__':
         if ang.angName == "viewer":
             vv.viewerAngles = vv.VectorAnglesList[-1]
             vv.viewerAngles.rotate = ([0.0, 0.5, 0.0])
-   
+
     for vecobjs in root.iter('vectorobject'):
         vobj = VectorObject()
         vobj.objName = vecobjs.get('name')
@@ -709,7 +706,7 @@ if __name__ == '__main__':
         # check if object is the ground. Will be set later.
         ground = None
         ground = vecobjs.get('ground')
-            
+
         # check if object is a copy of another, previously defined object
         copyfrom = None
         copyfrom = vecobjs.get('copyfrom')
@@ -722,22 +719,22 @@ if __name__ == '__main__':
                     vobj.angles = VectorObj.angles  # copy reference to angles, does not seem to work with deepcopy()
                     is_copy = True
                     break
-                    
+
         # set position and references to angles and movement
         for posdata in vecobjs.iter('position'):
             vobj.position[0] = float(posdata.findtext("positionX", default="0"))
-            vobj.position[1] = float(posdata.findtext("positionY", default="0")) 
+            vobj.position[1] = float(posdata.findtext("positionY", default="0"))
             vobj.position[2] = -float(posdata.findtext("positionZ", default="0")) # inverted for easier coordinates definition
         angleName = vecobjs.findtext("anglesref", None)
         for angles in vv.VectorAnglesList:
             if angles.angName == angleName:
                 vobj.angles = angles
                 break
-           
+
         # get (or set) some default values. Not needed for copied objects.
-        if is_copy == True: 
+        if is_copy == True:
             def_minshade = str(vobj.minShade)
-        else: 
+        else:
             def_minshade = "0.3"
             def_color = (def_colorR, def_colorG, def_colorB) = (128, 128, 128)
             # if not a copied object, read default values for some surface properties
@@ -755,9 +752,9 @@ if __name__ == '__main__':
                 def_backColor = (int(def_backColorR), int(def_backColorG), int(def_backColorB))
                 break
             def_edgeWidth = vecobjs.findtext("defedgewidth", default="0")
-            def_showBack = vecobjs.findtext("defshowback", default="0")           
+            def_showBack = vecobjs.findtext("defshowback", default="0")
         vobj.minShade = float(vecobjs.findtext("minshade", default=def_minshade))
-        
+
         if is_copy == False:
             # add nodes ie. "points" or "corners". No changes allowed for copied objects.
             for nodedata in vecobjs.iter('nodelist'):
@@ -776,7 +773,7 @@ if __name__ == '__main__':
             angleXadd = float(angledata.findtext("angleXadd", default="0"))
             angleYadd = float(angledata.findtext("angleYadd", default="0"))
             angleZadd = float(angledata.findtext("angleZadd", default="0"))
-            if angleXadd != 0 or angleYadd != 0 or angleZadd != 0: 
+            if angleXadd != 0 or angleYadd != 0 or angleZadd != 0:
                 storeangles = copy.copy(vobj.angles.angles) # store temporarily
                 storeposition = copy.copy(vobj.position) # store temporarily
                 vobj.angles.angles = np.array([angleXadd, angleYadd, angleZadd]) # use the requested initial rotation
@@ -786,12 +783,12 @@ if __name__ == '__main__':
                 vobj.nodes = np.hstack((vobj.rotatedNodes, np.ones((np.shape(vobj.rotatedNodes)[0], 1)))) # overwrite original nodes with rotated (to init angles) nodes
                 vobj.angles.angles = storeangles
                 vobj.position = storeposition
-                
-        # add surfaces ie. 2D flat polygons. 
+
+        # add surfaces ie. 2D flat polygons.
         for surfacedata in vecobjs.iter('surfacelist'):
             for surf in surfacedata.iter('surface'):
                 idnum = int(surf.get("ID"))
-                
+
                 if is_copy == True:
                     for surfobj in vobj.surfaces:
                         if surfobj.idnum == idnum:
@@ -800,7 +797,7 @@ if __name__ == '__main__':
                     def_backColor = surfobj.backColor
                     def_edgeWidth = str(surfobj.edgeWidth)
                     def_showBack = str(surfobj.showBack)
-                    
+
                 color = def_color
                 for colordata in surf.iter('color'):
                     colorR = int(colordata.findtext("colorR", default=def_colorR))
@@ -830,7 +827,7 @@ if __name__ == '__main__':
                     vobj.addSurfaces(idnum, color, edgeWidth, showBack, backColor, node_list)
                 else:
                     vobj.modifySurfaces(idnum, color, edgeWidth, showBack, backColor)
-                            
+
         # check if is a flat object (one surface only)
         if len(vobj.surfaces) == 1:
             vobj.isFlat = 1
@@ -843,7 +840,7 @@ if __name__ == '__main__':
         # define this (last added) object as ground if so specified
         if ground is not None:
             vv.groundObject = vv.VectorObjs[-1]
-            # precalculate ground colors   
+            # precalculate ground colors
             # add background color for the first component
             vv.groundColors.append(vv.backgroundColor)
             for i in range(vv.groundShadeNr):
@@ -856,7 +853,7 @@ if __name__ == '__main__':
 
     # define a vector position object holding all the positions of other objects in its nodes
     for vecobjs in root.iter('positionobject'):
-        vobj = VectorPosition()                   
+        vobj = VectorPosition()
         vobj.objName = vecobjs.get('name')
         for posdata in vecobjs.iter('position'):
             vobj.position[0] = float(posdata.findtext("positionX", default="0"))
@@ -876,10 +873,10 @@ if __name__ == '__main__':
             object_list.append((object_num, VectorObj))  # reference to object position data row and respective object
             object_num += 1
         vobj.addNodes(vobj_nodes)
-        vobj.addObjects(object_list)           
+        vobj.addObjects(object_list)
         # set the object
         vv.setVectorPos(vobj)
         break
-    
+
     # run the main program
     vv.run()
