@@ -418,7 +418,7 @@ class JellyCubes:
             [ 1, -1, -1],
             [-1, -1, -1],
             [-1, -1,  1]
-            ])).astype(np.float)
+            ])).astype(float)
         self.edges = np.array([
             [0, 1],
             [1, 2],
@@ -503,7 +503,7 @@ if __name__ == '__main__':
 
     pygame.font.init()
     # pygame.mixer.init()
-    # music_file = "river road.mod"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=39506
+    # music_file = "river road.ogg"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=39506
     # pygame.mixer.music.load(music_file)
     # pygame.mixer.music.play(loops=-1)
 
