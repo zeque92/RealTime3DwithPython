@@ -787,7 +787,7 @@ class RGBSphere:
             surf_coord = np.hstack((polar[:, 0:1] * self.image_size[0],  # x as in "normal"
                                     ((1.0 + R * np.log(np.tan(np.pi / 4 + 0.4999 * (polar[:, 1:2] * np.pi - np.pi / 2)))) / 2.0) * self.image_size[1]))
         #     surf_coord_y = (np.minimum(0.9999, np.maximum(0.0, ((1.0 + R * np.log(np.tan(np.pi / 4 + 0.4999 * (np.arccos(self.rotated_nodes_flat[:, 1] / self.radius)
-        #                    - np.pi / 2)))) / 2.0))) * self.image_size[1]).astype(np.int)
+        #                    - np.pi / 2)))) / 2.0))) * self.image_size[1]).astype(np.int16)
             # Mercator results in poles being outsied of picture - clip y coordinates
             surf_coord[:, 1][surf_coord[:, 1] < 0] = 0
             surf_coord[:, 1][surf_coord[:, 1] > self.image_size[1] - 1] = self.image_size[1] - 1
@@ -924,17 +924,17 @@ class RGBSphere:
 
         # set up image for screen use and for array use.
 
-        screen_size = np.array([self.width, self.height]).astype(np.int)
+        screen_size = np.array([self.width, self.height]).astype(np.int16)
         self.image_ratio = max(self.image_size[0] * self.image_ext / self.width, self.image_size[1] / self.height) / 0.9
         if self.image_ratio > 1.0:
             # scale image if larger than desired
-            self.image_screen_size = (self.image_size / self.image_ratio).astype(np.int)
+            self.image_screen_size = (self.image_size / self.image_ratio).astype(np.int16)
             self.image_screen = pygame.transform.scale(self.image, self.image_screen_size)
         else:
             self.image_ratio = 1.0
             self.image_screen_size = self.image_size
             self.image_screen = self.image
-        self.image_pos = ((screen_size - self.image_screen_size * np.array([self.image_ext, 1.0])) / 2).astype(np.int)
+        self.image_pos = ((screen_size - self.image_screen_size * np.array([self.image_ext, 1.0])) / 2).astype(np.int16)
 
         # make a bigger version of the original image as well as a surfarray. Using vstack as first axis is the X coordinate
         self.image_array = pygame.surfarray.pixels3d(self.image)
@@ -1016,14 +1016,14 @@ class RGBSphere:
                 self.plot_info_msg(self.screen_info, 10, 140 + i * 15, info_msg)
 
         # add keyboard info:
-        self.screen.blit(self.screen_info, (10, 10), (10, 10, 550, 15 + 90 + 160 + len(self.timer_names) * 15))
+        self.screen.blit(self.screen_info, (10, 10), (10, 10, 550, 15 + 15 + 90 + 160 + len(self.timer_names) * 15))
 
     def setup_info_screen(self):
 
         # show keys
         while self.screen_info.get_locked():
             self.screen_info.unlock()
-        i = 160 + len(self.timer_names) * 15
+        i = 160 + 15 + len(self.timer_names) * 15
         self.plot_info_msg(self.screen_info, 10,  0 + i, 'change mode:    left / right')
         self.plot_info_msg(self.screen_info, 10, 15 + i, 'change depth:   up / down')
         self.plot_info_msg(self.screen_info, 10, 30 + i, 'lighting mode:  l')
@@ -1402,7 +1402,7 @@ if __name__ == '__main__':
 
     pygame.font.init()
     pygame.mixer.init()
-    music_file = "alacrity.mod"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=39506
+    music_file = "alacrity.ogg"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=39506
     pygame.mixer.music.load(music_file)
     pygame.mixer.music.play(loops=-1)
 
