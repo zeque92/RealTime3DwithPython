@@ -16,3 +16,5 @@ There are 14 directories:
 * RayCasting_Map: Ray casting to a map.
 * RayCasting_Game: Ray casting, full screen - the game.
 * Cubester: A Rubik's Cube simulator.
+
+[Note: Updated most of the directories originally added 2020 - 2022 in Nov 2023. Minor bug fixes due to deprecated NumPy data types, and replacing the original Amiga MOD music files with the same converted to OGG. Apparently, Pygame has lost the ability to play Amiga MODs in one of the updates.]
