@@ -52,7 +52,7 @@ class SpaceInvaders:
         self.ship_pic = pygame.image.load(fileobj, namehint).convert()
         self.ship_pic.set_colorkey((255, 255, 255))
         shield_size = int(np.max(np.asarray(self.ship_pic.get_size()) * 1.6))
-        (fileobj, namehint) = self.load_dat('shield_small p')
+        (fileobj, namehint) = self.load_dat('Shield_small p')
         self.ship_shield_pic = pygame.transform.scale(pygame.image.load(fileobj, namehint).convert(), (shield_size, shield_size))
         self.ship_shield_pic.set_colorkey((0, 0, 0))
         self.ship_shield_pic.set_alpha(96)
@@ -101,23 +101,23 @@ class SpaceInvaders:
         self.alien_boss1_pic = pygame.transform.scale(self.alien_boss1_pic, np.array(self.alien_boss1_pic.get_size()) * 2 // 3)
         self.pic_colorkey(self.alien_boss1_pic, (36, 36, 36))
         self.alien_boss1_cannon_pos = np.array([[self.alien_boss1_pic.get_size()[0] * 0.2 - 10, self.alien_boss1_pic.get_size()[1] - 5],
-                                                [self.alien_boss1_pic.get_size()[0] * 0.8 - 10, self.alien_boss1_pic.get_size()[1] - 5]], dtype=np.float)
+                                                [self.alien_boss1_pic.get_size()[0] * 0.8 - 10, self.alien_boss1_pic.get_size()[1] - 5]], dtype=float)
         (fileobj, namehint) = self.load_dat('alien boss 2 p')
         self.alien_boss2_pic = pygame.image.load(fileobj, namehint).convert()
         self.alien_boss2_pic.set_colorkey((0, 0, 0))
         self.alien_boss2_hit_area = pygame.Rect(87, 300, 106, 65)
         self.alien_boss2_cannon_pos = np.array([[self.alien_boss2_pic.get_size()[0] * 0.43 - 10, self.alien_boss2_pic.get_size()[1] - 25],
-                                                [self.alien_boss2_pic.get_size()[0] * 0.57 - 10, self.alien_boss2_pic.get_size()[1] - 25]], dtype=np.float)
+                                                [self.alien_boss2_pic.get_size()[0] * 0.57 - 10, self.alien_boss2_pic.get_size()[1] - 25]], dtype=float)
         (fileobj, namehint) = self.load_dat('alien boss 3 p')
         self.alien_boss3_pic = pygame.image.load(fileobj, namehint).convert()
         self.alien_boss3_pic.set_colorkey((0, 0, 0))
         self.alien_boss3_hit_area = pygame.Rect(135, 210, 52, 45)
-        self.alien_boss3_cannon_pos = np.array([[-10, 225], [110, 210], [192, 210], [312, 225]], dtype=np.float)
+        self.alien_boss3_cannon_pos = np.array([[-10, 225], [110, 210], [192, 210], [312, 225]], dtype=float)
         (fileobj, namehint) = self.load_dat('alien boss 4 p')
         self.alien_boss4_pic = pygame.image.load(fileobj, namehint).convert()
         self.alien_boss4_pic.set_colorkey((0, 0, 0))
         self.alien_boss4_hit_area = pygame.Rect(153, 340, 72, 35)
-        self.alien_boss4_cannon_pos = np.array([[27, 368], [146, 350], [212, 350], [321, 368]], dtype=np.float)
+        self.alien_boss4_cannon_pos = np.array([[27, 368], [146, 350], [212, 350], [321, 368]], dtype=float)
         (fileobj, namehint) = self.load_dat('alien_ufo p')
         self.alien_ufo_pic = pygame.image.load(fileobj, namehint).convert()
         self.alien_ufo_pic.set_colorkey((0, 0, 0))
@@ -447,7 +447,7 @@ class SpaceInvaders:
                 self.level_completed_time += 1
                 pic = self.font_game_score.render('LEVEL ' + str(self.level) + ' COMPLETED', True, self.title_color, self.background_color)
                 pic.set_colorkey((self.background_color))
-                position = ((self.screen_size - pic.get_size()) / 2).astype(np.int)
+                position = ((self.screen_size - pic.get_size()) / 2).astype(int)
                 self.screen.blit(pic, position)
 
         # test if Freeze Alien powerup is active
@@ -783,7 +783,7 @@ class SpaceInvaders:
                                    125.0 * np.cos(star_move_frac * np.pi / 2.0),
                                    -0.5 * np.sin(star_move_frac * np.pi / 2.0)])
 
-        position = ((self.screen_size - self.game_over_pic.get_size()) / 2).astype(np.int)
+        position = ((self.screen_size - self.game_over_pic.get_size()) / 2).astype(int)
         self.screen.blit(self.game_over_pic, position)
 
     # ----------------   new level setup   ----------------
@@ -869,7 +869,7 @@ class SpaceInvaders:
         # level 1
         self.level_data.append((
             self.alien1_pic, None,
-            self.bullet_alien1_pic, np.array([[self.alien1_pic.get_size()[0] // 2 - 1, self.alien1_pic.get_size()[1]]], dtype=np.float),
+            self.bullet_alien1_pic, np.array([[self.alien1_pic.get_size()[0] // 2 - 1, self.alien1_pic.get_size()[1]]], dtype=float),
             self.alien1_sound_explosion,
             25, 1,
             6, 5, 1.8, 1.5, 20, 40,
@@ -879,7 +879,7 @@ class SpaceInvaders:
         # level 2
         self.level_data.append((
             self.alien2_pic, None,
-            self.bullet_alien1_pic, np.array([[self.alien2_pic.get_size()[0] // 2 - 1, self.alien2_pic.get_size()[1]]], dtype=np.float),
+            self.bullet_alien1_pic, np.array([[self.alien2_pic.get_size()[0] // 2 - 1, self.alien2_pic.get_size()[1]]], dtype=float),
             self.alien1_sound_explosion,
             28, 1,
             8, 5, 1.6, 1.4, 20, 45,
@@ -889,7 +889,7 @@ class SpaceInvaders:
         # level 3
         self.level_data.append((
             self.alien3_pic, None,
-            self.bullet_alien1_pic, np.array([[self.alien3_pic.get_size()[0] // 2 - 1, self.alien3_pic.get_size()[1]]], dtype=np.float),
+            self.bullet_alien1_pic, np.array([[self.alien3_pic.get_size()[0] // 2 - 1, self.alien3_pic.get_size()[1]]], dtype=float),
             self.alien1_sound_explosion,
             30, 1,
             7, 6, 1.6, 1.4, 20, 45,
@@ -909,7 +909,7 @@ class SpaceInvaders:
         # level 5
         self.level_data.append((
             self.alien4_pic, None,
-            self.bullet_alien1_pic, np.array([[self.alien4_pic.get_size()[0] // 2 - 1, self.alien4_pic.get_size()[1]]], dtype=np.float),
+            self.bullet_alien1_pic, np.array([[self.alien4_pic.get_size()[0] // 2 - 1, self.alien4_pic.get_size()[1]]], dtype=float),
             self.alien1_sound_explosion,
             32, 1,
             7, 7, 1.6, 1.3, 20, 50,
@@ -919,7 +919,7 @@ class SpaceInvaders:
         # level 6
         self.level_data.append((
             self.alien5_pic, None,
-            self.bullet_alien1_pic, np.array([[self.alien5_pic.get_size()[0] // 2 - 1, self.alien5_pic.get_size()[1]]], dtype=np.float),
+            self.bullet_alien1_pic, np.array([[self.alien5_pic.get_size()[0] // 2 - 1, self.alien5_pic.get_size()[1]]], dtype=float),
             self.alien1_sound_explosion,
             35, 1,
             8, 7, 1.5, 1.4, 22, 45,
@@ -929,7 +929,7 @@ class SpaceInvaders:
         # level 7
         self.level_data.append((
             self.alien6_pic, None,
-            self.bullet_alien1_pic, np.array([[self.alien6_pic.get_size()[0] // 2 - 1, self.alien6_pic.get_size()[1]]], dtype=np.float),
+            self.bullet_alien1_pic, np.array([[self.alien6_pic.get_size()[0] // 2 - 1, self.alien6_pic.get_size()[1]]], dtype=float),
             self.alien1_sound_explosion,
             38, 1,
             8, 8, 1.5, 1.3, 24, 50,
@@ -949,7 +949,7 @@ class SpaceInvaders:
         # level 9
         self.level_data.append((
             self.alien7_pic, None,
-            self.bullet_alien1_pic, np.array([[self.alien7_pic.get_size()[0] // 2 - 1, self.alien7_pic.get_size()[1]]], dtype=np.float),
+            self.bullet_alien1_pic, np.array([[self.alien7_pic.get_size()[0] // 2 - 1, self.alien7_pic.get_size()[1]]], dtype=float),
             self.alien1_sound_explosion,
             40, 1,
             8, 8, 1.5, 1.4, 25, 50,
@@ -959,7 +959,7 @@ class SpaceInvaders:
         # level 10
         self.level_data.append((
             self.alien8_pic, None,
-            self.bullet_alien1_pic, np.array([[self.alien8_pic.get_size()[0] // 2 - 1, self.alien8_pic.get_size()[1]]], dtype=np.float),
+            self.bullet_alien1_pic, np.array([[self.alien8_pic.get_size()[0] // 2 - 1, self.alien8_pic.get_size()[1]]], dtype=float),
             self.alien1_sound_explosion,
             42, 1,
             8, 8, 1.5, 1.3, 25, 50,
@@ -969,7 +969,7 @@ class SpaceInvaders:
         # level 11
         self.level_data.append((
             self.alien9_pic, None,
-            self.bullet_alien1_pic, np.array([[self.alien9_pic.get_size()[0] // 2 - 1, self.alien9_pic.get_size()[1]]], dtype=np.float),
+            self.bullet_alien1_pic, np.array([[self.alien9_pic.get_size()[0] // 2 - 1, self.alien9_pic.get_size()[1]]], dtype=float),
             self.alien1_sound_explosion,
             44, 1,
             8, 8, 1.5, 1.3, 25, 50,
@@ -989,7 +989,7 @@ class SpaceInvaders:
         # level 13
         self.level_data.append((
             self.alien10_pic, None,
-            self.bullet_alien1_pic, np.array([[self.alien10_pic.get_size()[0] // 2 - 1, self.alien10_pic.get_size()[1]]], dtype=np.float),
+            self.bullet_alien1_pic, np.array([[self.alien10_pic.get_size()[0] // 2 - 1, self.alien10_pic.get_size()[1]]], dtype=float),
             self.alien1_sound_explosion,
             46, 1,
             9, 8, 1.5, 1.4, 25, 50,
@@ -999,7 +999,7 @@ class SpaceInvaders:
         # level 14
         self.level_data.append((
             self.alien11_pic, None,
-            self.bullet_alien1_pic, np.array([[self.alien11_pic.get_size()[0] // 2 - 1, self.alien11_pic.get_size()[1]]], dtype=np.float),
+            self.bullet_alien1_pic, np.array([[self.alien11_pic.get_size()[0] // 2 - 1, self.alien11_pic.get_size()[1]]], dtype=float),
             self.alien1_sound_explosion,
             48, 1,
             9, 9, 1.5, 1.4, 25, 50,
@@ -1009,7 +1009,7 @@ class SpaceInvaders:
         # level 15
         self.level_data.append((
             self.alien12_pic, None,
-            self.bullet_alien1_pic, np.array([[self.alien12_pic.get_size()[0] // 2 - 1, self.alien12_pic.get_size()[1]]], dtype=np.float),
+            self.bullet_alien1_pic, np.array([[self.alien12_pic.get_size()[0] // 2 - 1, self.alien12_pic.get_size()[1]]], dtype=float),
             self.alien1_sound_explosion,
             50, 1,
             9, 9, 1.5, 1.5, 25, 50,
@@ -1470,7 +1470,7 @@ class SpaceInvaders:
         # adjust a picture by moving it (offset) and fitting it in a new size.
         # first copy the original
         image_copy = image.copy()
-        image_size = np.asarray(image.get_size(), dtype=np.int)
+        image_size = np.asarray(image.get_size(), dtype=int)
         # create a new one, with desired final size
         image = pygame.Surface(size)
         # apply offset
@@ -1717,7 +1717,7 @@ class Alien:
             self.position = np.array([screen_size[0] * (0.5 + (s[0] + s[1]) * (screen_size[0] - self.size[0] * 1.1)
                                                         / screen_size[0] / 4.0) - (self.size[0] / 2),
                                      screen_size[1] * (0.3 + (s[2] + s[3]) * (screen_size[1] / (0.5 / 0.3) - self.size[1] * 1.1)
-                                                       / screen_size[1] / 4.0) - (self.size[1] / 2)], dtype=np.float)
+                                                       / screen_size[1] / 4.0) - (self.size[1] / 2)], dtype=float)
             self.rect = pygame.Rect(self.position, self.size)
 
         elif time >= self.last_move + self.move_delay:
@@ -1817,7 +1817,7 @@ class Score:
     def __init__(self, space_inv, score_amount, score_text, font, start_pos, color, background_color):
 
         space_inv.game_score += score_amount
-        self.position = np.array(start_pos).astype(np.float)
+        self.position = np.array(start_pos).astype(float)
         self.pic = font.render(score_text, True, color)
         self.pic.set_colorkey(background_color)
         self.show_time = 2000
