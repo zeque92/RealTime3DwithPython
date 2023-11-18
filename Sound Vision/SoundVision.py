@@ -30,9 +30,9 @@ class SoundVision:
         self.height = self.screen.get_size()[1]
         self.target_size = (self.width * 0.9, self.height * 0.9)  # target size for pictures
         self.screenCopy = screen.copy()
-        self.music_file1 = "cats-eye.mod"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=45538
-        self.music_file2 = "firepower.mod"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=45537
-        self.music_file3 = "sinking2.mod"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=45536
+        self.music_file1 = "cats-eye.ogg"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=45538
+        self.music_file2 = "firepower.ogg"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=45537
+        self.music_file3 = "sinking2.ogg"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=45536
         self.pic_file1 = "Alphaks.jpg"
         self.pic_file2 = "Guru.jpg"
         self.pic_file3 = "TheEnd.jpg"

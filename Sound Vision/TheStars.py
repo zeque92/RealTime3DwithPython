@@ -183,7 +183,7 @@ class TheStars:
             [0, 0, -6, 0.03, 1, 360],
             [0, 0, 12, -0.05, 0, 480],
             [0, 0, 0, 0, 0, 0]
-            ], dtype=np.float)
+            ], dtype=float)
 
     def plotTitle(self, msg, color, coord):
 
@@ -275,14 +275,14 @@ class TheStars:
         # define color as a function of distance
         colors = ((1.0 - self.stars[:, 2:3] / (self.zRange[1] - self.zRange[0])) * 200 + 55).astype(np.uint8)
         rgb_array = pygame.surfarray.pixels3d(self.screen)
-        rgb_array[(self.stars[:, 0] + self.midScreen[0]).astype(np.int), (self.stars[:, 1] + self.midScreen[1]).astype(np.int), 0:3] \
+        rgb_array[(self.stars[:, 0] + self.midScreen[0]).astype(np.int16), (self.stars[:, 1] + self.midScreen[1]).astype(np.int16), 0:3] \
             = np.hstack((colors, colors, colors))
         # add pixels to those which are closest (color is above a threshold)
-        rgb_array[(self.stars[:, 0][colors[:, 0] > 150] + self.midScreen[0] + 1).astype(np.int), (self.stars[:, 1][colors[:, 0] > 150] + self.midScreen[1]).astype(np.int), 0:3] \
+        rgb_array[(self.stars[:, 0][colors[:, 0] > 150] + self.midScreen[0] + 1).astype(np.int16), (self.stars[:, 1][colors[:, 0] > 150] + self.midScreen[1]).astype(np.int16), 0:3] \
             = np.hstack((colors[colors[:, 0] > 150], colors[colors[:, 0] > 150], colors[colors[:, 0] > 150]))
-        rgb_array[(self.stars[:, 0][colors[:, 0] > 200] + self.midScreen[0]).astype(np.int), (self.stars[:, 1][colors[:, 0] > 200] + self.midScreen[1] + 1).astype(np.int), 0:3] \
+        rgb_array[(self.stars[:, 0][colors[:, 0] > 200] + self.midScreen[0]).astype(np.int16), (self.stars[:, 1][colors[:, 0] > 200] + self.midScreen[1] + 1).astype(np.int16), 0:3] \
             = np.hstack((colors[colors[:, 0] > 200], colors[colors[:, 0] > 200], colors[colors[:, 0] > 200]))
-        rgb_array[(self.stars[:, 0][colors[:, 0] > 230] + self.midScreen[0] + 1).astype(np.int), (self.stars[:, 1][colors[:, 0] > 230] + self.midScreen[1] + 1).astype(np.int), 0:3] \
+        rgb_array[(self.stars[:, 0][colors[:, 0] > 230] + self.midScreen[0] + 1).astype(np.int16), (self.stars[:, 1][colors[:, 0] > 230] + self.midScreen[1] + 1).astype(np.int16), 0:3] \
             = np.hstack((colors[colors[:, 0] > 230], colors[colors[:, 0] > 230], colors[colors[:, 0] > 230]))
 
         self.measureTime("draw")

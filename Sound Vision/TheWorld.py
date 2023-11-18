@@ -1424,7 +1424,7 @@ if __name__ == '__main__':
     # initialize font & mixer
     pygame.font.init()
     pygame.mixer.init()
-    music_file = "sinking2.mod"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=45536
+    music_file = "sinking2.ogg"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=45536
     pygame.mixer.music.load(music_file)
     pygame.mixer.music.play()
 

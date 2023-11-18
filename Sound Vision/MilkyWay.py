@@ -374,7 +374,7 @@ if __name__ == '__main__':
 
     # initialize mixer
     pygame.mixer.init()
-    music_file = "firepower.mod"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=45537
+    music_file = "firepower.ogg"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=45537
     pygame.mixer.music.load(music_file)
     pygame.mixer.music.play()
 

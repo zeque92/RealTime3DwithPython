@@ -135,7 +135,7 @@ class ShadowBobs:
     def addBob(self, bob):
 
         screenPos = (self.midScreen + ((np.sin(self.bobPosition[bob, 0:2]) + np.cos(self.bobPosition[bob, 2:4])) / 2)
-                     * (self.midScreen - [self.bobRadius, self.bobRadius]) - [self.bobRadius, self.bobRadius]).astype(np.int)
+                     * (self.midScreen - [self.bobRadius, self.bobRadius]) - [self.bobRadius, self.bobRadius]).astype(np.int16)
 
         # add Bob. screenData will also automatically drop back to 0 after 255 (as is uint8)
         self.screenData[screenPos[0]:screenPos[0] + self.bobSize, screenPos[1]:screenPos[1] + self.bobSize] += self.bobData
@@ -498,7 +498,7 @@ if __name__ == '__main__':
 
     # initialize mixer
     pygame.mixer.init()
-    music_file = "firepower.mod"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=45537
+    music_file = "firepower.ogg"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=45537
     # start music player
     pygame.mixer.music.load(music_file)
     pygame.mixer.music.play()
