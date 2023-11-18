@@ -1,5 +1,5 @@
 # RealTime3DwithPython
-Real time 3D vector graphics with Python, old skool Amiga Demo style. See also https://oldskoolpython.blogspot.com/
+Real time 3D vector graphics with Python, old skool Amiga Demo style. And some other stuff. See https://oldskoolpython.blogspot.com/
 
 There are 14 directories:
 * Vector3D: A project to develop a 3D vector city with a light source and shadows. 
