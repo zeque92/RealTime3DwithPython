@@ -58,9 +58,6 @@ class MazeSolver:
             self.running = False
             return
 
-        self.save_image()
-        i_cnt = 0
-
         cell = np.copy(self.start_pos)
         previous = np.copy(cell)
 
@@ -103,7 +100,6 @@ class MazeSolver:
                 previous = np.copy(cell)
                 cell = valid_neighbors[0, 0:2]
                 self.draw_cell(cell, previous, self.path_color)
-
             else:
                 # either a dead end (vn_count = 0) or a junction (vn_count > 1): pick the junction with the shortest distance to end_pos with valid neighbors
                 closest = np.argmin(self.junctions[:self.junction_nr + 1, 4])
@@ -127,16 +123,6 @@ class MazeSolver:
                 cell = valid_neighbors[np.argmax(valid_neighbors[:, 2]), 0:2]
                 self.draw_cell(cell, previous, self.path_color)
 
-            i_cnt += 1
-            if i_cnt > 50:
-                i_cnt = 0
-                pygame.display.flip()
-                self.save_image()
-
-        pygame.display.flip()
-        self.save_image()
-        i_cnt = 0
-
         # retract to starting position to show the route.
         previous = np.copy(cell)
         self.junctions_used = 0
@@ -156,17 +142,9 @@ class MazeSolver:
             self.draw_cell(cell, previous, self.solution_color)
             previous = np.copy(cell)
 
-            i_cnt += 1
-            if i_cnt > 50:
-                i_cnt = 0
-                pygame.display.flip()
-                self.save_image()
-
         self.blocks[cell[0], cell[1]] = 4  # mark starting cell as route
         # ensure display is updated
         pygame.display.flip()
-
-        self.save_image()
 
     def draw_cell(self, cell, previous, color):
 
@@ -286,7 +264,7 @@ class MazeSolver:
 
         # save maze as a png image. Use the first available number to avoid overwriting a previous image.
         for file_nr in range(1, 1000):
-            file_name = 'Mazegif_' + ('00' + str(file_nr))[-3:] + '.png'
+            file_name = 'Maze_' + ('00' + str(file_nr))[-3:] + '.png'
             if not exists(file_name):
                 pygame.image.save(self.screen, file_name)
                 break
@@ -337,7 +315,7 @@ class MazeSolver:
                 if event.button == 1:
                     # left button: choose start and end position.
                     mouse_pos = np.asarray(pygame.mouse.get_pos())
-                    cell = np.flip((mouse_pos - self.screen_block_offset) // (self.screen_block_size)).astype(np.int)
+                    cell = np.flip((mouse_pos - self.screen_block_offset) // (self.screen_block_size)).astype(np.int16)
                     # make sure is within array
                     if cell[0] >= 1 and cell[1] >= 1 and cell[0] <= np.shape(self.blocks)[0] - 2 and cell[1] <= np.shape(self.blocks)[1] - 2:
                         # make sure is not in a wall
@@ -366,8 +344,7 @@ if __name__ == '__main__':
     # set screen size and initialize it
     pygame.display.init()
     disp_size = (1920, 1080)
-    disp_size = (640, 400)
-    info_display = False
+    info_display = True
     screen = pygame.display.set_mode(disp_size)
     pygame.display.set_caption('Maze Solver / KS 2022. Left Mouse Button to Continue.')
     running = True
@@ -375,8 +352,7 @@ if __name__ == '__main__':
     # initialize maze solver with bogus data to make it available
     maze_solver = MazeSolver(screen, (0, 0, 100, 100), np.ones((1, 1)), np.array([1, 1]), np.array([1, 1]))
     maze_solver.info_display = info_display
-    maze_solver.cell_size = 5  # cell size in pixels
-
+    maze_solver.cell_size = 10  # cell size in pixels
 
     while running:
 
@@ -405,13 +381,13 @@ if __name__ == '__main__':
             blocks_copy = np.copy(blocks)
             screen_copy = screen.copy()
             # default start and end in maze corners
-            prev_start_pos = np.array([-1, -1], dtype=np.int)
-            prev_end_pos = np.array([-1, -1], dtype=np.int)
+            prev_start_pos = np.array([-1, -1], dtype=np.int16)
+            prev_end_pos = np.array([-1, -1], dtype=np.int16)
             prev_msg = maze_solver.last_message
             prev_mode = maze_solver.slow_mode
             prev_info = maze_solver.info_display
-            start_pos = np.asarray(np.shape(blocks), dtype=np.int) - 2  # bottom right corner
-            end_pos = np.array([1, 1], dtype=np.int)
+            start_pos = np.asarray(np.shape(blocks), dtype=np.int16) - 2  # bottom right corner
+            end_pos = np.array([1, 1], dtype=np.int16)
 
             maze_solver = MazeSolver(screen, rect, blocks, start_pos, end_pos)
 
