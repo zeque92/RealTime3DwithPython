@@ -26,11 +26,11 @@ class Ball:
         self.image = pygame.image.load('Normal_Mercator_map_85deg.jpg').convert()
         self.image_type = 'Mercator'
         self.image_array = pygame.surfarray.pixels2d(self.image)
-        self.image_flat_x = np.zeros((0), dtype=np.float)
+        self.image_flat_x = np.zeros((0), dtype=float)
         self.image_flat_y = np.zeros((0), dtype=np.int16)
         self.image_size = np.asarray(self.image.get_size())
         self.image_mercator_R = 1.0 / np.log(np.tan(np.pi / 4 + (85.0 / 90.0) * np.pi / 4))  # with this R y is in [-1,1] between -85 and +85 degrees
-        self.mid_screen = np.array([self.width // 2, self.height // 2], dtype=np.float)
+        self.mid_screen = np.array([self.width // 2, self.height // 2], dtype=float)
         self.target_fps = target_fps
         self.running = True
         self.paused = False
@@ -39,13 +39,13 @@ class Ball:
 
         self.radius = self.height // 3
         self.point_nr = 3 * self.radius  # nr of points on the equator
-        self.nodes = np.zeros((0, 3), dtype=np.float)
-        self.nodes_flat = np.zeros((0, 3), dtype=np.float)
+        self.nodes = np.zeros((0, 3), dtype=float)
+        self.nodes_flat = np.zeros((0, 3), dtype=float)
         self.nodes_flat_x = np.zeros((0), dtype=np.int16)
         self.nodes_flat_y = np.zeros((0), dtype=np.int16)
-        self.rotated_nodes = np.zeros((0, 4), dtype=np.float)
-        self.rotated_nodes_flat = np.zeros((0, 5), dtype=np.float)
-        self.node_colors = np.zeros((0), dtype=np.int)
+        self.rotated_nodes = np.zeros((0, 4), dtype=float)
+        self.rotated_nodes_flat = np.zeros((0, 5), dtype=float)
+        self.node_colors = np.zeros((0), dtype=np.int32)
         self.angles = np.array([0.0, 0.0, 0.0])
         self.rotate_speed = np.array([0.021, -0.017, 0.012])
         self.bounce = int((self.height - self.radius * 2) / 2)
@@ -165,7 +165,7 @@ class Ball:
             self.size = self.z_pos / (self.z_pos + z_pos)
         y_pos = self.bounce / 2 - np.sin(((time - self.move_timer) % self.bounce_speed) / self.bounce_speed * np.pi) * self.bounce * self.size
         x_pos = np.sin(((time - self.move_timer) % self.xz_move_speed) / self.xz_move_speed * np.pi * 2.0) * self.x_move * self.size
-        self.position = (self.mid_screen + np.array([x_pos, y_pos])).astype(np.int)
+        self.position = (self.mid_screen + np.array([x_pos, y_pos])).astype(np.int16)
         self.z_prev = z_pos
 
     def rotate(self):
@@ -234,7 +234,7 @@ class Ball:
                                         & (self.rotated_nodes[:, 1] >= -self.position[1])
                                         & (self.rotated_nodes[:, 1] < self.height - self.position[1] - 1)
                                         ] + np.array([self.position[0], self.position[1], 0, 0])
-                     ).astype(np.int)
+                     ).astype(np.int16)
         self.plot_count = np.shape(rot_nodes)[0]
         self.measure_time("select plotted")
 
@@ -244,11 +244,11 @@ class Ball:
         # color_mult2 = 256**2 + 256 + 1
         # color_add = 10 * color_mult2
 
-        # rgb_array[rot_nodes[:, 0], rot_nodes[:, 1]] = (rot_nodes[:, 2] * color_mult).astype(np.int) * color_mult2 + color_add
+        # rgb_array[rot_nodes[:, 0], rot_nodes[:, 1]] = (rot_nodes[:, 2] * color_mult).astype(np.int16) * color_mult2 + color_add
         # # add nearby dots to have less black spaces
-        # rgb_array[rot_nodes[:, 0] + 1, rot_nodes[:, 1]] = (rot_nodes[:, 2] * color_mult).astype(np.int) * color_mult2 + color_add
-        # rgb_array[rot_nodes[:, 0], rot_nodes[:, 1] + 1] = (rot_nodes[:, 2] * color_mult).astype(np.int) * color_mult2 + color_add
-        # rgb_array[rot_nodes[:, 0] + 1, rot_nodes[:, 1] + 1] = (rot_nodes[:, 2] * color_mult).astype(np.int) * color_mult2 + color_add
+        # rgb_array[rot_nodes[:, 0] + 1, rot_nodes[:, 1]] = (rot_nodes[:, 2] * color_mult).astype(np.int16) * color_mult2 + color_add
+        # rgb_array[rot_nodes[:, 0], rot_nodes[:, 1] + 1] = (rot_nodes[:, 2] * color_mult).astype(np.int16) * color_mult2 + color_add
+        # rgb_array[rot_nodes[:, 0] + 1, rot_nodes[:, 1] + 1] = (rot_nodes[:, 2] * color_mult).astype(np.int16) * color_mult2 + color_add
 
         rgb_array[rot_nodes[:, 0], rot_nodes[:, 1]] = rot_nodes[:, 3]
         # add nearby dots to have less black spaces
@@ -274,9 +274,9 @@ class Ball:
         # if self.image_type == 'Mercator':
         #     # Mercator mode; y in image assumed to be between -85 and 85 degrees. (https://en.wikipedia.org/wiki/Mercator_projection)
         #     R = 1.0 / np.log(np.tan(np.pi / 4 + (85.0 / 90.0) * np.pi / 4))  # Mercator R for +-85 degree image
-        #     surf_coord_x = (polar_x * self.image_size[0]).astype(np.int)  # x as in "normal"
+        #     surf_coord_x = (polar_x * self.image_size[0]).astype(np.int16)  # x as in "normal"
         #     surf_coord_y = (np.minimum(0.9999, np.maximum(0.0, ((1.0 + R * np.log(np.tan(np.pi / 4 + 0.4999 * (np.arccos(self.rotated_nodes_flat[:, 1] / self.radius)
-        #                    - np.pi / 2)))) / 2.0))) * self.image_size[1]).astype(np.int)
+        #                    - np.pi / 2)))) / 2.0))) * self.image_size[1]).astype(np.int16)
         # color = self.image_array[surf_coord_x, surf_coord_y]
 
         # same as above but condensed, quicker
@@ -289,7 +289,7 @@ class Ball:
             #                    + (np.sign(self.rotated_nodes_flat[:, 2]) + 2) * self.image_size[0] / 4).astype(np.int16),  # x using precalcs
             # y calculated from Mercator - rather complex and hence slow
             # (np.minimum(0.9999, np.maximum(0.0, ((1.0 + R * np.log(np.tan(np.pi / 4 + 0.4999 * (np.arccos(self.rotated_nodes_flat[:, 1] / self.radius)
-            #                 - np.pi / 2)))) / 2.0))) * self.image_size[1]).astype(np.int)  # y calculated
+            #                 - np.pi / 2)))) / 2.0))) * self.image_size[1]).astype(np.int16)  # y calculated
             self.image_flat_y[(4.0 * self.rotated_nodes_flat[:, 1]).astype(np.int16) + 4 * self.radius]  # y using precalcs
            ]
 
@@ -352,12 +352,12 @@ class Ball:
         self.image_flat_x = (self.image_size[0] / 4.0) / np.maximum(2.0, np.sqrt(self.radius ** 2 - (flat_y_range / 4.0) ** 2))
         if self.image_type == 'Mercator':
             self.image_flat_y = (np.minimum(0.9999, np.maximum(0.0, ((1.0 + R * np.log(np.tan(np.pi / 4.0 + 0.49999 * (np.arccos(flat_y_range /
-                        (4.0 * self.radius))- np.pi / 2.0)))) / 2.0))) * self.image_size[1]).astype(np.int)
+                        (4.0 * self.radius))- np.pi / 2.0)))) / 2.0))) * self.image_size[1]).astype(np.int16)
         else:
             self.image_flat_y = (np.minimum(0.9999, np.arctan2(flat_y_range, np.sqrt((self.radius * 4.0) ** 2 - flat_y_range ** 2)) / np.pi + 0.5)
-                                 * self.image_size[1]).astype(np.int)
+                                 * self.image_size[1]).astype(np.int16)
 
-        self.rotated_nodes_flat = np.zeros((np.shape(self.nodes_flat)[0], 4), dtype=np.float)
+        self.rotated_nodes_flat = np.zeros((np.shape(self.nodes_flat)[0], 4), dtype=float)
 
     def toggle_fullscreen(self):
 
@@ -444,7 +444,7 @@ if __name__ == '__main__':
 
     pygame.font.init()
     pygame.mixer.init()
-    music_file = "alacrity.mod"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/
+    music_file = "alacrity.ogg"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/
     pygame.mixer.music.load(music_file)
     pygame.mixer.music.play(loops=-1)
 
