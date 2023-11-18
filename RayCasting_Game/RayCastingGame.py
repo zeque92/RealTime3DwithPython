@@ -89,7 +89,7 @@ class RayCastingGame:
                     '4   f         g        2  c   2    4444    f  1',
                     '1   g   11    f  L111 1   c  2eeee L 555   e  1',
                     '1   f  15451  e  16 611   c  23335     6   d  1',
-                    '1   g         d     ee    c      54444 6   c  1',
+                    '1   g         d      ee    c      54444 6   c  1',
                     '1      L  11     cgcgcgcg                     1',
                     '11166666111111111111444411111111111111114444444']
         self.map_array = np.zeros((len(self.map[0]), len(self.map)), dtype=np.uint8)
@@ -118,14 +118,14 @@ class RayCastingGame:
         self.angle_add = self.view_width / self.width * np.pi / 180
 
         # item data copied from Item class to speed up handling
-        self.item_position = np.zeros((0), np.float)
-        self.item_size = np.zeros((0), np.float)
-        self.item_y_level = np.zeros((0), np.float)
-        self.item_ratio = np.zeros((0), np.float)
+        self.item_position = np.zeros((0), float)
+        self.item_size = np.zeros((0), float)
+        self.item_y_level = np.zeros((0), float)
+        self.item_ratio = np.zeros((0), float)
         self.item_itype = np.zeros((0), np.int16)
         self.item_active = np.ones((0), np.bool_)
         self.setup_items()
-        self.item_data = np.zeros((len(self.items), 6), dtype=np.float)  # item data has visible item nr, angle, distance, x_coord, y_floor, y_ceiling
+        self.item_data = np.zeros((len(self.items), 6), dtype=float)  # item data has visible item nr, angle, distance, x_coord, y_floor, y_ceiling
         self.items_visible = 0
         self.coin_rect = np.array([self.width * 5 / 6 - 4, 4, self.width * 1 / 6, self.width * 1 / 60], dtype=np.int16)  # defines coin progress bar
 
@@ -137,7 +137,7 @@ class RayCastingGame:
 
         # ray_data is an array of grid item, side (0 = up, 1 = right, 2 = down, 3 = left) map x, map y,
         #   distance from viewer, distance corrected for fishbowl, y_top and y_bottom for each ray
-        self.ray_data = np.zeros((self.width, 8), dtype=np.float)
+        self.ray_data = np.zeros((self.width, 8), dtype=float)
         # distance correction multiplier for each angle to counter the fishbowl effect
         self.distance_correction = np.cos(np.linspace(-self.view_width / 2, self.view_width / 2, self.width) / 180.0 * np.pi)
         # grid_blocks will hold the data on where each block of rays (for single processing run) starts and ends
@@ -975,7 +975,7 @@ class RayCastingGame:
                              1)
             for col in range(self.map_size[0]):
                 if self.map_array[col, row] > 0:
-                    pos = np.array([col * block_size, row * block_size], dtype=np.int)
+                    pos = np.array([col * block_size, row * block_size], dtype=np.int16)
                     pygame.draw.rect(screen, (200, 200, 200), (pos[0], pos[1], block_size, block_size), 0)
 
     def make_map_array(self, map):
@@ -1057,10 +1057,10 @@ class RayCastingGame:
         # self.setup_coin_item(self.position + np.array([0, -3]), 0.5)
 
         # set the item arrasy for quicker processing
-        self.item_position = np.asarray([item.position for item in self.items], dtype=np.float)
-        self.item_size = np.asarray([item.size for item in self.items], dtype=np.float)
-        self.item_y_level = np.asarray([item.y_level for item in self.items], dtype=np.float)
-        self.item_ratio = np.asarray([item.image_max_size[0] / (item.image_max_size[1] + 0.00001) for item in self.items], dtype=np.float)
+        self.item_position = np.asarray([item.position for item in self.items], dtype=float)
+        self.item_size = np.asarray([item.size for item in self.items], dtype=float)
+        self.item_y_level = np.asarray([item.y_level for item in self.items], dtype=float)
+        self.item_ratio = np.asarray([item.image_max_size[0] / (item.image_max_size[1] + 0.00001) for item in self.items], dtype=float)
         self.item_itype = np.asarray([item.itype for item in self.items], dtype=np.int16)
         self.item_active = np.asarray([item.active for item in self.items], dtype=np.bool_)
 
@@ -1178,7 +1178,7 @@ class Item:
 
         # y_level and size are in percentage or room height and y_level is for the mid point of item. Hence, making sure size / 2 < y_level < (1 - size / 2)
         self.itype = itype  # defines item type: 1 = coin, 2 = light bulb
-        self.position = np.asarray(position, dtype=np.float)  # position as map_x, map_y
+        self.position = np.asarray(position, dtype=float)  # position as map_x, map_y
         self.size = min(1.0, max(0.01, size))  # size as percentage of room height (floor to ceiling). Limited to between 1 and 100 %.
         self.y_level = min((1.0 - self.size / 2), max(self.size / 2, y_level))  # position as mid point as percentage of room height (floor to ceiling)
         self.active = active  # when setting up this is normally 1
@@ -1223,7 +1223,7 @@ if __name__ == '__main__':
 
     pygame.font.init()
     pygame.mixer.init()
-    music_file = "alacrity.mod"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/
+    music_file = "alacrity.ogg"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/
     pygame.mixer.music.load(music_file)
     pygame.mixer.music.play(loops=-1)
 
