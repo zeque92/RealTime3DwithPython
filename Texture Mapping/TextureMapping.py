@@ -49,7 +49,7 @@ class TextureMapping:
         self.trans_nodes = np.zeros((0, 2))                 # trans_nodes will have X,Y screen coordinates
         self.screen_rect = pygame.Rect((self.mid_screen), (1, 1))
 
-        self.image_A = pygame.image.load('Alphaks.jpg').convert()
+        self.image_A = pygame.image.load('Alphaks.JPG').convert()
         self.image_array_A = pygame.surfarray.pixels2d(self.image_A)
         image_size = np.asarray(self.image_A.get_size(), np.int16)
         # image_nodes must define the same number of nodes as the surface that uses them
@@ -78,7 +78,7 @@ class TextureMapping:
         self.image_nodes_W4 = self.setup_image_nodes(image_size, np.array([0, 0]), 4)
         self.image_nodes_W5 = self.setup_image_nodes(image_size, np.array([0, 0]), 5)
 
-        self.image_G = pygame.image.load('Guru.jpg').convert()
+        self.image_G = pygame.image.load('Guru.JPG').convert()
         self.image_array_G = pygame.surfarray.pixels2d(self.image_G)
         image_size = (np.asarray(self.image_G.get_size()) * 0.95).astype(np.int16)
         offset = np.array([10, image_size[1] / 8], np.int16)
