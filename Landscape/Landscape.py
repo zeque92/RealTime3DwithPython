@@ -517,9 +517,6 @@ if __name__ == '__main__':
     Prepare screen, etc.
     """
 
-    # set data directory
-    chdir("C:/Users/Kalle/OneDrive/Asiakirjat/Python")
-
     # set screen size
     # first check available full screen modes
     pygame.display.init()
@@ -531,10 +528,6 @@ if __name__ == '__main__':
 
     # initialize mixer
     pygame.mixer.init()
-    music_file = "sinking2.ogg"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/release.php?id=45536
-    # start music player
-    pygame.mixer.music.load(music_file)
-    pygame.mixer.music.play(loops=-1)
 
     screen = pygame.display.set_mode(disp_size)
     pygame.display.set_caption('Landscape')
@@ -543,5 +536,3 @@ if __name__ == '__main__':
     # exit; close display, stop music
     pygame.quit()
     exit()
-
-
