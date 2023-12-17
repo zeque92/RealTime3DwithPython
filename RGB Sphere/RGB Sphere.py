@@ -904,10 +904,10 @@ class RGBSphere:
                 x_right = int(x_1 + x_1_add * (y - y_1) / y_1_add)
                 if x_right < x_left:
                     # "wrong" order
-                    color += np.sum(image_array[x_right:x_left, y, :], axis=0)
+                    color = color + np.sum(image_array[x_right:x_left, y, :], axis=0)
                     pixel_count += x_left - x_right
                 elif x_right > x_left:
-                    color += np.sum(image_array[x_left:x_right, y, :], axis=0)
+                    color = color + np.sum(image_array[x_left:x_right, y, :], axis=0)
                     pixel_count += x_right - x_left
 
         if pixel_count == 0:
@@ -1253,7 +1253,7 @@ class RGBSphere:
         s.edges.append(edge_1)
         s.edges.append(edge_2)
         s.edges.append(edge_3)
-        s.edge_ixs = np.array([edge_1.edge_ix, edge_2.edge_ix, edge_3.edge_ix], dtype=np.int16)
+        s.edge_ixs = np.array([edge_1.edge_ix, edge_2.edge_ix, edge_3.edge_ix]).astype(np.int16)
         s.mid_surface = mid_surface
         s.depth = self.depth
         s.update_nodes()
