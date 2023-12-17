@@ -66,7 +66,7 @@ class RayCasting:
         self.angle_add = self.view_width / self.width * np.pi / 180
 
         # ray_data is an array of grid item, side (0 = up, 1 = right, 2 = down, 3 = left) map x, map y, and distance from viewer for each ray
-        self.ray_data = np.zeros((self.width, 5), dtype=np.float)
+        self.ray_data = np.zeros((self.width, 5), dtype=float)
         self.grid_blocks = np.zeros((0))
 
         self.screen_shade = pygame.Surface((self.view_blocks * self.block_size * 2, self.view_blocks * self.block_size * 2), 0, self.screen)
@@ -405,7 +405,7 @@ class RayCasting:
             for col in range(self.map_size[0]):
                 if self.map_array[col, row] > 0:
                     pos = np.array([(self.width - block_size * self.map_size[0]) // 2 + col * block_size,
-                                    (self.height - block_size * self.map_size[1]) // 2 + row * block_size], dtype=np.int)
+                                    (self.height - block_size * self.map_size[1]) // 2 + row * block_size], dtype=int)
                     pygame.draw.rect(screen, (200, 200, 200), (pos[0], pos[1], block_size, block_size), 0)
 
         return ((self.width - block_size * self.map_size[0]) // 2 - 6, (self.height - block_size * self.map_size[1]) // 2 - 6,
@@ -519,9 +519,9 @@ if __name__ == '__main__':
 
     pygame.font.init()
     pygame.mixer.init()
-    music_file = "alacrity.mod"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/
-    pygame.mixer.music.load(music_file)
-    pygame.mixer.music.play(loops=-1)
+    # music_file = "alacrity.mod"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/
+    # pygame.mixer.music.load(music_file)
+    # pygame.mixer.music.play(loops=-1)
 
     screen = pygame.display.set_mode(disp_size)  # pygame.FULLSCREEN | pygame.DOUBLEBUF
     pygame.display.set_caption('RayCasting Map')
