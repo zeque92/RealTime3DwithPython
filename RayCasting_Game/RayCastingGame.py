@@ -44,10 +44,10 @@ class RayCastingGame:
         self.clock = pygame.time.Clock()
 
         self.pic_theend = pygame.image.load('TheEnd.jpg').convert()
-        self.pic_guru2 = pygame.image.load('Guru2.jpg').convert()
+        self.pic_guru2 = pygame.image.load('Guru2.JPG').convert()
         self.pic_ball2 = pygame.image.load('Ball2.jpg').convert()
-        self.pic_alphaks2 = pygame.image.load('Alphaks2.jpg').convert()
-        self.pic_vector3d = pygame.image.load('Vector3D.jpg').convert()
+        self.pic_alphaks2 = pygame.image.load('Alphaks2.JPG').convert()
+        self.pic_vector3d = pygame.image.load('Vector3D.JPG').convert()
         self.pic_shadowbobs = pygame.image.load('ShadowBobs.jpg').convert()
         self.pic_milkyway2 = pygame.image.load('Milky_Way2.jpg').convert()
         self.pic_ray01 = pygame.image.load('Raytracing_01.jpg').convert()
@@ -89,7 +89,7 @@ class RayCastingGame:
                     '4   f         g        2  c   2    4444    f  1',
                     '1   g   11    f  L111 1   c  2eeee L 555   e  1',
                     '1   f  15451  e  16 611   c  23335     6   d  1',
-                    '1   g         d      ee    c      54444 6   c  1',
+                    '1   g         d      ee    c      54444 6   c 1',
                     '1      L  11     cgcgcgcg                     1',
                     '11166666111111111111444411111111111111114444444']
         self.map_array = np.zeros((len(self.map[0]), len(self.map)), dtype=np.uint8)
