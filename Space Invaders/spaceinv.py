@@ -52,7 +52,7 @@ class SpaceInvaders:
         self.ship_pic = pygame.image.load(fileobj, namehint).convert()
         self.ship_pic.set_colorkey((255, 255, 255))
         shield_size = int(np.max(np.asarray(self.ship_pic.get_size()) * 1.6))
-        (fileobj, namehint) = self.load_dat('Shield_small p')
+        (fileobj, namehint) = self.load_dat('shield_small p')
         self.ship_shield_pic = pygame.transform.scale(pygame.image.load(fileobj, namehint).convert(), (shield_size, shield_size))
         self.ship_shield_pic.set_colorkey((0, 0, 0))
         self.ship_shield_pic.set_alpha(96)
