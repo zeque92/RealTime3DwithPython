@@ -519,9 +519,9 @@ if __name__ == '__main__':
 
     pygame.font.init()
     pygame.mixer.init()
-    music_file = "alacrity.ogg"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/
-    pygame.mixer.music.load(music_file)
-    pygame.mixer.music.play(loops=-1)
+    # music_file = "alacrity.ogg"  # this mod by Jellybean is available at e.g. http://janeway.exotica.org.uk/
+    # pygame.mixer.music.load(music_file)
+    # pygame.mixer.music.play(loops=-1)
 
     screen = pygame.display.set_mode(disp_size)  # pygame.FULLSCREEN | pygame.DOUBLEBUF
     pygame.display.set_caption('RayCasting Map')
